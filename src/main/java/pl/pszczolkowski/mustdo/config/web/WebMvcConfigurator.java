@@ -12,6 +12,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.config.annotation.CorsConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -50,5 +51,12 @@ public class WebMvcConfigurator
       converters.add(new ByteArrayHttpMessageConverter());
       
    }
+   
+   @Override
+	public void configureCors(CorsConfigurer configurer) {
+		configurer
+			.enableCors("/**")
+			.allowedMethods("GET", "POST", "PUT", "DELETE");
+	}
      
 }
