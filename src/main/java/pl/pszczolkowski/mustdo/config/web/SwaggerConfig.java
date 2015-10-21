@@ -56,7 +56,7 @@ public class SwaggerConfig {
       return new Docket(DocumentationType.SWAGGER_2)
          .groupName(title)
          .select()
-         .paths(and(not(adminPaths()), regex("/api/.*")))
+         .paths(and(not(adminPaths()), regex(".*")))
          .build()
          .apiInfo(apiInfo(title))
          .protocols(Sets.newHashSet("http", "https"))
@@ -104,8 +104,8 @@ public class SwaggerConfig {
    }
 
    private Predicate<String> adminPaths() {
-      return or(regex("/api/admin/.*"),
-         regex("/api/javascript.*"));
+      return or(regex("/admin/.*"),
+         regex("/javascript.*"));
    }
 
 }
