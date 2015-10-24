@@ -1,4 +1,4 @@
-package pl.pszczolkowski.mustdo.web.restapi.TasksList;
+package pl.pszczolkowski.mustdo.web.restapi.tasksList;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

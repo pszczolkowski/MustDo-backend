@@ -1,4 +1,4 @@
-package pl.pszczolkowski.mustdo.web.restapi.TasksList;
+package pl.pszczolkowski.mustdo.web.restapi.tasksList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
