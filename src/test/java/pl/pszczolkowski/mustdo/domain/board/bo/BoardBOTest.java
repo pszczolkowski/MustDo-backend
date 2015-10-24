@@ -72,6 +72,14 @@ public class BoardBOTest extends ScenarioTest<GivenBoardBO, WhenBoardBO, ThenBoa
 	}
 	
 	@Test
+	public void should_return_unchanged_board_when_rename_invoked_and_name_does_not_changed(){
+		given().a_board_with_name(CLAZZ)
+			.and().other_board_with_name(CLAZZ + "other");
+		when().rename_is_invoked_with_name(CLAZZ);
+		then().nothing_has_changed();
+	}
+	
+	@Test
 	public void should_delete_board(){
 		given().a_board_with_name(CLAZZ);
 		when().delete_is_invoked();
