@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
-class BoardRename {
+public class BoardRename {
 
    @NotNull
    private Long id;
