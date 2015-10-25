@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
-class BoardNew {
+public class BoardNew {
 
    @NotNull
    @Size(min = 3, max = 100)
