@@ -19,13 +19,16 @@ import pl.pszczolkowski.mustdo.Application;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.finder.BoardSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
+import pl.pszczolkowski.mustdo.web.restapi.board.steps.GivenBoardDeleteEndpoint;
+import pl.pszczolkowski.mustdo.web.restapi.board.steps.ThenBoardDeleteEndpoint;
+import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
-public class BoardDeleteEndpointTest extends ScenarioTest<GivenBoardDeleteEndpoint, WhenBoardDeleteEndpoint, ThenBoardDeleteEndpoint>{
+public class BoardDeleteEndpointTest extends ScenarioTest<GivenBoardDeleteEndpoint, RestApiWhenStage, ThenBoardDeleteEndpoint>{
 	
 	@Autowired
 	@ProvidedScenarioState

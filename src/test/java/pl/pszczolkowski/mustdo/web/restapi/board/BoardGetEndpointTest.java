@@ -20,14 +20,14 @@ import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.GivenBoardGetEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.ThenBoardGetEndpoint;
-import pl.pszczolkowski.mustdo.web.restapi.board.steps.WhenBoardGetEndpoint;
+import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
-public class BoardGetEndpointTest extends ScenarioTest<GivenBoardGetEndpoint, WhenBoardGetEndpoint, ThenBoardGetEndpoint>{
+public class BoardGetEndpointTest extends ScenarioTest<GivenBoardGetEndpoint, RestApiWhenStage, ThenBoardGetEndpoint>{
 	@Autowired
 	@ProvidedScenarioState
 	private WebApplicationContext context;
@@ -45,8 +45,7 @@ public class BoardGetEndpointTest extends ScenarioTest<GivenBoardGetEndpoint, Wh
 	
 	@Test
 	public void should_return_board_when_get_invoked() throws Exception{
-		given()
-			.a_board()
+		given().a_board()
 			.and().a_request_to_endpoint();
 		when().request_is_invoked();
 		then().board_should_be_returned();
@@ -54,8 +53,7 @@ public class BoardGetEndpointTest extends ScenarioTest<GivenBoardGetEndpoint, Wh
 	
 	@Test
 	public void should_return_not_found_when_board_with_id_does_not_exist() throws Exception{
-		given()
-			.an_invalid_id()
+		given().an_invalid_id()
 			.and().a_request_to_endpoint();
 		when().request_is_invoked();
 		then().not_found_should_be_returned();

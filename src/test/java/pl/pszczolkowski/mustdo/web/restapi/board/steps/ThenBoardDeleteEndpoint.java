@@ -1,4 +1,4 @@
-package pl.pszczolkowski.mustdo.web.restapi.board;
+package pl.pszczolkowski.mustdo.web.restapi.board.steps;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;

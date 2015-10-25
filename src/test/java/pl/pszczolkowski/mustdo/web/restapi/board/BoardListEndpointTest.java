@@ -21,15 +21,14 @@ import pl.pszczolkowski.mustdo.domain.board.finder.BoardSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.GivenBoardListEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.ThenBoardListEndpoint;
-import pl.pszczolkowski.mustdo.web.restapi.board.steps.WhenBoardListEndpoint;
+import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
-public class BoardListEndpointTest extends ScenarioTest<GivenBoardListEndpoint, WhenBoardListEndpoint, ThenBoardListEndpoint>{
-	private static final String CLAZZ = BoardListEndpointTest.class.getSimpleName();
+public class BoardListEndpointTest extends ScenarioTest<GivenBoardListEndpoint, RestApiWhenStage, ThenBoardListEndpoint>{
 	
 	@Autowired
 	@ProvidedScenarioState
@@ -51,9 +50,7 @@ public class BoardListEndpointTest extends ScenarioTest<GivenBoardListEndpoint, 
 	
 	@Test
 	public void should_return_all_boards_when_list_invoked() throws Exception{
-		given().a_board_with_name(CLAZZ)
-			.and().a_board_with_name(CLAZZ+"1")
-			.and().a_board_with_name(CLAZZ+"2")
+		given().list_of_boards()
 			.and().a_request_to_endpoint();
 		when().request_is_invoked();
 		then().all_boards_should_be_returned();

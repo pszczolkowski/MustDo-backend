@@ -1,4 +1,4 @@
-package pl.pszczolkowski.mustdo.web.restapi.board;
+package pl.pszczolkowski.mustdo.web.restapi.board.steps;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 

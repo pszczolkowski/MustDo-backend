@@ -47,7 +47,7 @@ public class ThenBoardBO extends Stage<ThenBoardBO> {
 		assertThat(findOne, is(nullValue()));
 	}
 
-	public void nothing_has_changed() {
+	public void nothing_should_have_changed() {
 		assertThat(boardSnapshot.getName(), is(equalTo(updatedName)));
 	}
 

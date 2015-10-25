@@ -1,4 +1,4 @@
-package pl.pszczolkowski.mustdo.web.restapi.board.steps;
+package pl.pszczolkowski.mustdo.web.restapi.util;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
@@ -13,11 +13,11 @@ import com.tngtech.jgiven.annotation.BeforeStage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 
-public class WhenBoardGetEndpoint extends Stage<WhenBoardGetEndpoint>{
+public class RestApiWhenStage extends Stage<RestApiWhenStage> {
 
 	@ProvidedScenarioState
 	private ResultActions result;
-	   
+
 	@ExpectedScenarioState
 	private WebApplicationContext context;
 	@ExpectedScenarioState
@@ -36,6 +36,5 @@ public class WhenBoardGetEndpoint extends Stage<WhenBoardGetEndpoint>{
 	public void request_is_invoked() throws Exception {
 		result = mockMvc.perform(request);
 	}
-
 
 }

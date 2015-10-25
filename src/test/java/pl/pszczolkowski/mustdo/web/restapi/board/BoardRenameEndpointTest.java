@@ -21,14 +21,14 @@ import pl.pszczolkowski.mustdo.domain.board.finder.BoardSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.GivenBoardRenameEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.ThenBoardRenameEndpoint;
-import pl.pszczolkowski.mustdo.web.restapi.board.steps.WhenBoardRenameEndpoint;
+import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
-public class BoardRenameEndpointTest extends ScenarioTest<GivenBoardRenameEndpoint, WhenBoardRenameEndpoint, ThenBoardRenameEndpoint>{
+public class BoardRenameEndpointTest extends ScenarioTest<GivenBoardRenameEndpoint, RestApiWhenStage, ThenBoardRenameEndpoint>{
 	private static final String CLAZZ = BoardRenameEndpointTest.class.getSimpleName();
 	@Autowired
 	@ProvidedScenarioState

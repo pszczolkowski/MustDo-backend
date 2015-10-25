@@ -21,14 +21,14 @@ import pl.pszczolkowski.mustdo.domain.board.finder.BoardSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.GivenBoardAddEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.ThenBoardAddEndpoint;
-import pl.pszczolkowski.mustdo.web.restapi.board.steps.WhenBoardAddEndpoint;
+import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
-public class BoardAddEndpointTest extends ScenarioTest<GivenBoardAddEndpoint, WhenBoardAddEndpoint, ThenBoardAddEndpoint>{
+public class BoardAddEndpointTest extends ScenarioTest<GivenBoardAddEndpoint, RestApiWhenStage, ThenBoardAddEndpoint>{
 	
 	private static final String CLAZZ = BoardAddEndpointTest.class.getSimpleName();
 	@Autowired
