@@ -88,12 +88,11 @@ public class TasksListBOTest extends ScenarioTest<GivenTasksListBO, WhenTasksLis
 	}
 	
 	@Test
-	public void should_return_unchanged_tasksList_when_rename_invoked_and_name_does_not_changed(){
+	public void should_return_unchanged_tasksList_when_rename_invoked_and_name_did_not_changed(){
 		given().a_board()
-			.and().a_tasksList_with_name(CLAZZ)
-			.and().other_tasksList_with_name(CLAZZ + "other");
-		when().rename_is_invoked_with_name(CLAZZ + "other");
-		then().nothing_has_changed();
+			.and().a_tasksList_with_name(CLAZZ);
+		when().rename_is_invoked_with_name(CLAZZ);
+		then().nothing_should_have_changed();
 	}
 	
 	@Test

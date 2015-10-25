@@ -53,7 +53,7 @@ public class ThenTasksListBO extends Stage<ThenTasksListBO>{
 		assertThat(tasksListSnapshot, is(nullValue()));
 	}
 
-	public void nothing_has_changed() {
+	public void nothing_should_have_changed() {
 		notNull(tasksListSnapshot);
 		notNull(tasksListSnapshot.getId());
 		assertThat(tasksListSnapshot.getBoardId(), is(equalTo(boardSnapshot.getId())));
