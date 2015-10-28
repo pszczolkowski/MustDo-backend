@@ -1,5 +1,9 @@
 package pl.pszczolkowski.mustdo.domain.task.bo.steps;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
@@ -26,6 +30,9 @@ public class GivenTasksListBO extends Stage<GivenTasksListBO>{
 	private BoardSnapshot boardSnapshot;
 	@ProvidedScenarioState
 	private TasksListSnapshot tasksListSnapshot;
+	@ProvidedScenarioState
+   private List<TasksListSnapshot> tasksListSnapshots = new ArrayList<>();;
+	
 	
 	public GivenTasksListBO a_board() {
 		boardSnapshot = boardBO.add(CLAZZ);
@@ -51,6 +58,16 @@ public class GivenTasksListBO extends Stage<GivenTasksListBO>{
 		return this;
 		
 	}
+
+   public void few_tasks_list_with_boardId() {
+      List<String> names = new ArrayList<>(Arrays.asList(new String[]{"TO DO", "DONE", "IN PROGRESS", "FROZEN", "REJECTED"}));
+      
+      for (String name : names) {
+         TasksList tasksList = new TasksList(name, boardSnapshot.getId());
+         tasksList = tasksListRepository.save(tasksList);
+         tasksListSnapshots.add(tasksList.toSnapshot());
+      }
+   }
 
 	
 }

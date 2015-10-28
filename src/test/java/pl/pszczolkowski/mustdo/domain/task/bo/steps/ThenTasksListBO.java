@@ -1,11 +1,6 @@
 package pl.pszczolkowski.mustdo.domain.task.bo.steps;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.util.Assert.notNull;
+import java.util.List;
 
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
@@ -13,6 +8,10 @@ import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.dto.TasksListSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.finder.TasksListSnapshotFinder;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.springframework.util.Assert.notNull;
 
 public class ThenTasksListBO extends Stage<ThenTasksListBO>{
 	
@@ -28,6 +27,10 @@ public class ThenTasksListBO extends Stage<ThenTasksListBO>{
 	private boolean tasksListAlreadyExistExceptionThrown;
 	@ExpectedScenarioState
 	private TasksListSnapshotFinder tasksListSnapshotFinder;
+	@ExpectedScenarioState
+   private int countOfRemovedList;
+	@ExpectedScenarioState
+   private List<TasksListSnapshot> tasksListSnapshots;
 	
 	public void tasksList_should_be_added() {
 		notNull(tasksListSnapshot);
@@ -60,5 +63,12 @@ public class ThenTasksListBO extends Stage<ThenTasksListBO>{
 		assertThat(tasksListSnapshot.getName(), is(equalTo(updatedName)));
 		
 	}
+
+   public void should_delete_tasksLists() {
+      assertThat(countOfRemovedList, is(equalTo(tasksListSnapshots.size())));
+      tasksListSnapshots.stream().forEach((tasksListSnapshot) -> {
+         assertThat(tasksListSnapshotFinder.findOneById(tasksListSnapshot.getId()), is(nullValue()));
+      });
+   }
 
 }

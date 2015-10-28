@@ -25,6 +25,8 @@ public class WhenTasksListBO extends Stage<WhenTasksListBO>{
 	private boolean tasksListAlreadyExistExceptionThrown;
 	@ProvidedScenarioState
 	private String updatedName;
+	@ProvidedScenarioState
+   private int countOfRemovedList;
 	
 	public void addTasksList_is_invoked() {
 		try{
@@ -51,5 +53,9 @@ public class WhenTasksListBO extends Stage<WhenTasksListBO>{
 	public void delete_is_invoked() {
 		tasksListBO.delete(tasksListSnapshot.getId());
 	}
+
+   public void delete_by_boardId_invoked() {
+      countOfRemovedList = tasksListBO.removeTasksListsWithBoardId(boardSnapshot.getId());
+   }
 
 }
