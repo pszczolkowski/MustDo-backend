@@ -3,9 +3,11 @@ package pl.pszczolkowski.mustdo.domain.board.bo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.board.entity.Board;
+import pl.pszczolkowski.mustdo.domain.board.event.BoardRemovedEvent;
 import pl.pszczolkowski.mustdo.domain.board.exception.BoardAlreadyExistException;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
 import pl.pszczolkowski.mustdo.sharedkernel.annotations.BussinesObject;
@@ -16,10 +18,12 @@ public class BoardBOImpl
 
    private static final Logger LOGGER = LoggerFactory.getLogger(BoardBOImpl.class);
    private final BoardRepository boardRepository;
+   private final ApplicationEventPublisher eventPublisher;
 
    @Autowired
-   public BoardBOImpl(BoardRepository boardRepository) {
+   public BoardBOImpl(BoardRepository boardRepository, ApplicationEventPublisher eventPublisher) {
       this.boardRepository = boardRepository;
+      this.eventPublisher = eventPublisher;
    }
 
    @Override
@@ -65,6 +69,9 @@ public class BoardBOImpl
    public void delete(Long id) {
       boardRepository.delete(id);
       LOGGER.info("Board with id <{}> removed", id);
+      
+      BoardRemovedEvent boardRemovedEvent = new BoardRemovedEvent(this, id);
+      eventPublisher.publishEvent(boardRemovedEvent);
    }
 
 }
