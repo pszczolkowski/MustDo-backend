@@ -14,4 +14,6 @@ public interface TasksListRepository
    TasksList findOneByNameAndBoardId(String name, Long boardId);
 
    List<TasksList> findByBoardId(Long boardId);
+   
+   int removeByBoardId(Long boardId);
 }

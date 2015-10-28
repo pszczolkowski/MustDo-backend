@@ -67,4 +67,11 @@ public class TasksListBOImpl
       LOGGER.info("Tasks List with id <{}> deleted", id);
    }
 
+   @Override
+   public int removeTasksListsWithBoardId(Long boardId) {
+      int removedTasksListCount = tasksListRepository.removeByBoardId(boardId);
+      LOGGER.info("<{}> tasks lists removed", removedTasksListCount);
+      return removedTasksListCount;
+   }
+
 }
