@@ -29,7 +29,7 @@ public class TasksListSnapshotFinderImpl
    }
 
    @Override
-   public List<TasksListSnapshot> findAllWithBoardId(Long boardId) {
+   public List<TasksListSnapshot> findAllByBoardId(Long boardId) {
       return tasksListRepository.findByBoardId(boardId)
          .stream()
          .map(TasksList::toSnapshot)
@@ -37,7 +37,7 @@ public class TasksListSnapshotFinderImpl
    }
 
    @Override
-   public TasksListSnapshot findOneWithNameAndBoardId(String name, Long boardId) {
+   public TasksListSnapshot findOneByNameAndBoardId(String name, Long boardId) {
       TasksList tasksList = tasksListRepository.findOneByNameAndBoardId(name, boardId);
 
       return tasksList == null ? null : tasksList.toSnapshot();

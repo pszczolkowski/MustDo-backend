@@ -33,6 +33,6 @@ public class TasksListNewValidator
    }
 
    private boolean tasksListWithSuchNameAlreadyExistsOnGivenBoard(String name, Long boardId) {
-      return tasksListSnapshotFinder.findOneWithNameAndBoardId(name, boardId) != null;
+      return tasksListSnapshotFinder.findOneByNameAndBoardId(name, boardId) != null;
    }
 }

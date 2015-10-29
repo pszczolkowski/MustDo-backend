@@ -26,7 +26,7 @@ public class ThenTasksListListEndpoint extends Stage<ThenTasksListListEndpoint>{
 	
 	@SuppressWarnings("unchecked")
 	public void all_tasksList_should_be_returned() throws Exception {
-		int expectedSize = tasksListSnapshotFinder.findAllWithBoardId(boardSnapshot.getId()).size();
+		int expectedSize = tasksListSnapshotFinder.findAllByBoardId(boardSnapshot.getId()).size();
 		result
 			.andExpect(status().isOk())
 			.andExpect(content().contentType("application/json;charset=UTF-8"))

@@ -64,7 +64,7 @@ public class ThenTasksListBO extends Stage<ThenTasksListBO>{
 		
 	}
 
-   public void should_delete_tasksLists() {
+   public void tasksLists_should_be_deleted() {
       assertThat(countOfRemovedList, is(equalTo(tasksListSnapshots.size())));
       tasksListSnapshots.stream().forEach((tasksListSnapshot) -> {
          assertThat(tasksListSnapshotFinder.findOneById(tasksListSnapshot.getId()), is(nullValue()));

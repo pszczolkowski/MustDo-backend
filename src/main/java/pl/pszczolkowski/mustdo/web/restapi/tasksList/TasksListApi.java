@@ -88,8 +88,10 @@ public class TasksListApi {
          required = true) Long boardId) {
 
       List<TasksList> tasksLists = tasksListSnapshotFInder
-         .findAllWithBoardId(boardId)
-         .stream().map(TasksList::new).collect(Collectors.toList());
+         .findAllByBoardId(boardId)
+         .stream()
+         .map(TasksList::new)
+         .collect(Collectors.toList());
 
       return new ResponseEntity<>(tasksLists, HttpStatus.OK);
 

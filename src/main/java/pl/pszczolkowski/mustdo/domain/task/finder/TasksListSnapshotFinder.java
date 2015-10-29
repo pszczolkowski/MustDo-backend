@@ -8,7 +8,7 @@ public interface TasksListSnapshotFinder {
 
    TasksListSnapshot findOneById(Long id);
 
-   List<TasksListSnapshot> findAllWithBoardId(Long boardId);
+   List<TasksListSnapshot> findAllByBoardId(Long boardId);
 
-   TasksListSnapshot findOneWithNameAndBoardId(String name, Long boardId);
+   TasksListSnapshot findOneByNameAndBoardId(String name, Long boardId);
 }

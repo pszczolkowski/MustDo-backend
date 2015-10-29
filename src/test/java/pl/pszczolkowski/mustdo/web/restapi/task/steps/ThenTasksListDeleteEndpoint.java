@@ -21,7 +21,7 @@ public class ThenTasksListDeleteEndpoint extends Stage<ThenTasksListDeleteEndpoi
 	private BoardSnapshot boardSnapshot;
 	
 	public void tasksList_should_be_deleted() {
-		List<TasksListSnapshot> tasksListSnapshots = tasksListSnapshotFinder.findAllWithBoardId(boardSnapshot.getId());
+		List<TasksListSnapshot> tasksListSnapshots = tasksListSnapshotFinder.findAllByBoardId(boardSnapshot.getId());
 		assertThat(tasksListSnapshots.size(), is(equalTo(0)));
 	}
 

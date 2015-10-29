@@ -12,8 +12,7 @@ public class TasksListRename {
    @NotNull
    private Long id;
    @NotNull
-   @Size(min = 2,
-      max = 100)
+   @Size(min = 2, max = 100)
    private String name;
    @NotNull
    private Long boardId;
@@ -48,5 +47,5 @@ public class TasksListRename {
    public void setBoardId(Long boardId) {
       this.boardId = boardId;
    }
-   
+
 }

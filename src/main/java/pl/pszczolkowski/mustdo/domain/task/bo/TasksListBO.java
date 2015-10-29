@@ -10,6 +10,6 @@ public interface TasksListBO {
    
    void delete(Long id);
 
-   public int removeTasksListsWithBoardId(Long boardId);
+   int removeTasksListsWithBoardId(Long boardId);
 
 }

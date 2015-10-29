@@ -107,6 +107,6 @@ public class TasksListBOTest extends ScenarioTest<GivenTasksListBO, WhenTasksLis
    public void should_delete_tasksListsWithGivenBoardId(){
       given().a_board().and().few_tasks_list_with_boardId();
       when().delete_by_boardId_invoked();
-      then().should_delete_tasksLists();
+      then().tasksLists_should_be_deleted();
    }
 }

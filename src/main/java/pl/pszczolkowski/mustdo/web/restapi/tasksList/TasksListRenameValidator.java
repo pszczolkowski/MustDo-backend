@@ -34,7 +34,7 @@ public class TasksListRenameValidator
    }
 
    private boolean tasksListWithSuchNameAlreadyExistsOnGivenBoard(TasksListRename tasksListRename) {
-      TasksListSnapshot tasksListSnapshot = tasksListSnapshotFinder.findOneWithNameAndBoardId(tasksListRename.getName(),
+      TasksListSnapshot tasksListSnapshot = tasksListSnapshotFinder.findOneByNameAndBoardId(tasksListRename.getName(),
          tasksListRename.getBoardId());
       return tasksListSnapshot != null && !tasksListSnapshot.getId().equals(tasksListRename.getId());
    }

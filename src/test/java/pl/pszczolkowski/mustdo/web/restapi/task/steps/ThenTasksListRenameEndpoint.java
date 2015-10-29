@@ -32,7 +32,7 @@ public class ThenTasksListRenameEndpoint extends Stage<ThenTasksListRenameEndpoi
 	private TasksListRename tasksListRename;
 	
 	public ThenTasksListRenameEndpoint tasksList_should_be_renamed() throws Exception {
-		TasksListSnapshot tasksListSnapshot = tasksListSnapshotFinder.findOneWithNameAndBoardId(updatedName, boardSnapshot.getId());
+		TasksListSnapshot tasksListSnapshot = tasksListSnapshotFinder.findOneByNameAndBoardId(updatedName, boardSnapshot.getId());
 		assertNotNull(tasksListSnapshot);
 		return this;
 	}

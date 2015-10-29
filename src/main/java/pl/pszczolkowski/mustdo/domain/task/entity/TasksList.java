@@ -2,7 +2,6 @@ package pl.pszczolkowski.mustdo.domain.task.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,9 +26,7 @@ public class TasksList
    private Long boardId;
 
    @NotNull
-   @Size(min = 2,
-      max = 100)
-   @Column(unique = true)
+   @Size(min = 2, max = 100)
    private String name;
 
    protected TasksList() {

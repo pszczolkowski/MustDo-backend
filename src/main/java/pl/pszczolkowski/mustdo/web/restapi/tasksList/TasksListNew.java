@@ -10,8 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class TasksListNew {
 
    @NotNull
-   @Size(min = 3,
-      max = 100)
+   @Size(min = 3, max = 100)
    private String name;
    @NotNull
    private Long boardId;
@@ -28,7 +27,7 @@ public class TasksListNew {
    }
 
    @ApiModelProperty(
-      value = "Unique identifier of Board to whcich Tasks List belongs",
+      value = "Unique identifier of Board to which Tasks List belongs",
       required = true)
    public Long getBoardId() {
       return boardId;

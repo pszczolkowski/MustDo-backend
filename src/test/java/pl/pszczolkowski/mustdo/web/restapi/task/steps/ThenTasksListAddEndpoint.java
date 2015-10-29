@@ -27,7 +27,7 @@ public class ThenTasksListAddEndpoint extends Stage<ThenTasksListAddEndpoint> {
 	private BoardSnapshot boardSnapshot;
 
 	public ThenTasksListAddEndpoint tasksList_should_be_created() {
-		TasksListSnapshot tasksListSnapshot = tasksListSnapshotFinder.findOneWithNameAndBoardId(name, boardSnapshot.getId());
+		TasksListSnapshot tasksListSnapshot = tasksListSnapshotFinder.findOneByNameAndBoardId(name, boardSnapshot.getId());
 		assertNotNull(tasksListSnapshot);
 		return this;
 	}
