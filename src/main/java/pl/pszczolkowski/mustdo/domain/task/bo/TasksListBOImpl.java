@@ -40,22 +40,15 @@ public class TasksListBOImpl
 
    @Override
    public TasksListSnapshot rename(Long id, String name) {
-      TasksList tasksList = tasksListRepository.findOneByName(name);
-      if (tasksList != null) {
-         TasksListSnapshot tasksListSnapshot = tasksList.toSnapshot();
-         if (tasksListSnapshot.getId().equals(id)) {
-            return tasksListSnapshot;
-         } else {
-            throw new TasksListAlreadyExistException();
-         }
+      TasksList tasksList = tasksListRepository.findOne(id);
+      TasksListSnapshot tasksListSnapshot = tasksList.toSnapshot();
+      if( tasksListRepository.findOneByNameAndBoardId(name, tasksListSnapshot.getBoardId()) != null){
+         throw new TasksListAlreadyExistException();
       }
-
-      tasksList = tasksListRepository.findOne(id);
-
       tasksList.rename(name);
       tasksList = tasksListRepository.save(tasksList);
-
-      TasksListSnapshot tasksListSnapshot = tasksList.toSnapshot();
+      tasksListSnapshot = tasksList.toSnapshot();
+      
       LOGGER.info("Tasks List with id <{}> renamed to <{}>", tasksListSnapshot.getId(), tasksListSnapshot.getName());
 
       return tasksListSnapshot;
