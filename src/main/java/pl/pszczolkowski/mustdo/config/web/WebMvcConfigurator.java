@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.CorsConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -24,21 +24,8 @@ import pl.pszczolkowski.mustdo.web.converter.LocalDateTimeSerializer;
 public class WebMvcConfigurator
    extends WebMvcConfigurerAdapter {
 
-
    @Value("${server.contextPath}")
    private String contextPath;
-
-   private static final int maxUploadSize = 5000000;
-
-   /**
-    * Supports FileUploads.
-    */
-   @Bean
-   public MultipartResolver multipartResolver() {
-      CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-      multipartResolver.setMaxUploadSize(maxUploadSize);
-      return multipartResolver;
-   }
 
    @Override
    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -58,5 +45,14 @@ public class WebMvcConfigurator
 			.enableCors("/**")
 			.allowedMethods("GET", "POST", "PUT", "DELETE");
 	}
-     
+   
+   @Bean
+   public MessageSource messageSource() {
+       ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+       messageSource.setBasename("classpath:/messages");
+       messageSource.setDefaultEncoding("UTF-8");
+       messageSource.setCacheSeconds(-1);
+       return messageSource;
+   }
+      
 }
