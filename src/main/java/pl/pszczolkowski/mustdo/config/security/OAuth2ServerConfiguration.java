@@ -44,24 +44,26 @@ public class OAuth2ServerConfiguration {
          http
             .exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)
-            .and()
+         .and()
             .logout()
-            .logoutUrl("/api/logout")
+            .logoutUrl("/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler)
-            .and()
+         .and()
             .csrf()
             .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize"))
             .disable()
             .headers()
             .frameOptions().disable()
-            .and()
+         .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()                
+         .and()                
             .authorizeRequests()
-            .antMatchers("/api/authenticate").permitAll()
-            .antMatchers("/api/register").permitAll()
-            .antMatchers("/api/**").authenticated();
+            .antMatchers("/authenticate").permitAll()
+            .antMatchers("/account/register").permitAll()
+            .antMatchers("/api/account/register").permitAll()
+            .antMatchers("/mustdo/account/register").permitAll()
+            .antMatchers("/**").authenticated();
 
       }
    }
