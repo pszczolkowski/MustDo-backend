@@ -15,7 +15,7 @@ import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.bo.TasksListBO;
 import pl.pszczolkowski.mustdo.domain.task.dto.TasksListSnapshot;
-import pl.pszczolkowski.mustdo.web.restapi.tasksList.TasksListRename;
+import pl.pszczolkowski.mustdo.web.restapi.task.TasksListRename;
 
 public class GivenTasksListRenameEndpoint extends Stage<GivenTasksListRenameEndpoint>{
 	

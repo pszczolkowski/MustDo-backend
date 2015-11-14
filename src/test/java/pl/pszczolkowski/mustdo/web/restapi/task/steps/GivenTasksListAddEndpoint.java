@@ -14,7 +14,7 @@ import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.bo.TasksListBO;
-import pl.pszczolkowski.mustdo.web.restapi.tasksList.TasksListNew;
+import pl.pszczolkowski.mustdo.web.restapi.task.TasksListNew;
 
 public class GivenTasksListAddEndpoint extends Stage<GivenTasksListAddEndpoint>{
 	

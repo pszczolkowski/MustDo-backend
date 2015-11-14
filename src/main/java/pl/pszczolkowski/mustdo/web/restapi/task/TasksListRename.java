@@ -1,4 +1,4 @@
-package pl.pszczolkowski.mustdo.web.restapi.tasksList;
+package pl.pszczolkowski.mustdo.web.restapi.task;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
