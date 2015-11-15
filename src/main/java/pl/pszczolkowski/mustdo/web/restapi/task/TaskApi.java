@@ -141,7 +141,7 @@ public class TaskApi {
       method = RequestMethod.POST,
       consumes = APPLICATION_JSON_VALUE)
    public ResponseEntity<Task> move(@Valid @RequestBody TaskMove taskMove) {
-      taskBO.moveToAntoherTasksList(taskMove.getId(), taskMove.getTasksListId());
+      taskBO.moveToAntoherTasksList(taskMove.getId(), taskMove.getListId());
 
       return new ResponseEntity<>(HttpStatus.OK);
 

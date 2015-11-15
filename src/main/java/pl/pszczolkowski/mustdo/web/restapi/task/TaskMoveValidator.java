@@ -33,7 +33,7 @@ public class TaskMoveValidator
       if (taskSnapshotFinder.findOneById(taskMove.getId()) == null) {
          errors.rejectValue("id", "TaskDoesNotExist");
       }
-      if (tasksListSnapshotFinder.findOneById(taskMove.getTasksListId()) == null) {
+      if (tasksListSnapshotFinder.findOneById(taskMove.getListId()) == null) {
          errors.rejectValue("tasksListId", "TasksListDoesNotExist");
 
       }

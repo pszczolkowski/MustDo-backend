@@ -11,9 +11,9 @@ public class TaskMove {
    @NotNull
    private Long id;
    @NotNull
-   private Long tasksListId;
+   private Long listId;
 
-   @ApiModelProperty("Task unique identifier")
+   @ApiModelProperty("Unique identifier of Task")
    public Long getId() {
       return id;
    }
@@ -22,13 +22,13 @@ public class TaskMove {
       this.id = id;
    }
 
-   @ApiModelProperty("Unique identifier of Tasks List that Task should be linked to")
-   public Long getTasksListId() {
-      return tasksListId;
+   @ApiModelProperty("Unique identifier of List that Task would be linked to")
+   public Long getListId() {
+      return listId;
    }
 
-   public void setTasksListId(Long tasksListId) {
-      this.tasksListId = tasksListId;
+   public void setListId(Long tasksListId) {
+      this.listId = tasksListId;
    }
 
 }

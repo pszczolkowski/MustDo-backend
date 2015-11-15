@@ -11,14 +11,15 @@ public class TaskEdit {
 
    @NotNull
    private Long id;
+   
    @NotNull
    @Size(min = 2, max = 100)
    private String title;
-   @NotNull
+   
    @Size(min = 3, max = 1000)
    private String description;
 
-   @ApiModelProperty("Task unique identifier")
+   @ApiModelProperty("Unique identifier of Task")
    public Long getId() {
       return id;
    }

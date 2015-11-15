@@ -10,13 +10,11 @@ public class Task {
    private final Long id;
    private final String title;
    private final String description;
-   private final Long tasksListId;
-   private final Long boardId;
+   private final Long listId;
 
    public Task(TaskSnapshot taskSnapshot) {
       this.id = taskSnapshot.getId();
-      this.boardId = taskSnapshot.getBoardId();
-      this.tasksListId = taskSnapshot.getTasksListId();
+      this.listId = taskSnapshot.getTasksListId();
       this.title = taskSnapshot.getTitle();
       this.description = taskSnapshot.getDescription();
    }
@@ -36,14 +34,9 @@ public class Task {
       return description;
    }
 
-   @ApiModelProperty("Unique identifier of Tasks List that Task is linked to")
-   public Long getTasksListId() {
-      return tasksListId;
-   }
-
-   @ApiModelProperty("Unique identifier of Board that Task is linked to")
-   public Long getBoardId() {
-      return boardId;
+   @ApiModelProperty("Unique identifier of List that Task is linked to")
+   public Long getListId() {
+      return listId;
    }
 
 }
