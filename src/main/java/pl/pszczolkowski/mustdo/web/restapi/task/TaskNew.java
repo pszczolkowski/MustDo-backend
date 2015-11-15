@@ -10,32 +10,22 @@ import io.swagger.annotations.ApiModelProperty;
 public class TaskNew {
 
    @NotNull
-   private Long tasksListId;
-   @NotNull
-   private Long boardId;
+   private Long listId;
+   
    @NotNull
    @Size(min = 2, max = 100)
    private String title;
-   @NotNull
+   
    @Size(min = 3, max = 1000)
    private String description;
 
-   @ApiModelProperty("Unique identifier of Tasks List that Task is linked to")
-   public Long getTasksListId() {
-      return tasksListId;
+   @ApiModelProperty("Unique identifier of List that Task is linked to")
+   public Long getListId() {
+      return listId;
    }
 
-   @ApiModelProperty("Unique identifier of Board that Task is linked to")
-   public void setTasksListId(Long tasksListId) {
-      this.tasksListId = tasksListId;
-   }
-
-   public Long getBoardId() {
-      return boardId;
-   }
-
-   public void setBoardId(Long boardId) {
-      this.boardId = boardId;
+   public void setListId(Long tasksListId) {
+      this.listId = tasksListId;
    }
 
    @ApiModelProperty("Task title")

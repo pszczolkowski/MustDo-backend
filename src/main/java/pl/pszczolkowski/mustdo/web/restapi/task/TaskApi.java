@@ -31,19 +31,27 @@ public class TaskApi {
 
    private final TaskBO taskBO;
    private final TaskSnapshotFinder taskSnapshotFinder;
+   private final Validator taskNewValidator;
    private final Validator taskMoveValidator;
    private final Validator taskEditValidator;
 
-   @Autowired
-   public TaskApi(TaskBO taskBO, TaskSnapshotFinder taskSnapshotFinder,
-      @Qualifier("taskMoveValidator") Validator taskMoveValidator,
-      @Qualifier("taskEditValidator") Validator taskEditValidator) {
-      this.taskBO = taskBO;
-      this.taskSnapshotFinder = taskSnapshotFinder;
-      this.taskMoveValidator = taskMoveValidator;
-      this.taskEditValidator = taskEditValidator;
-   }
+	@Autowired
+	public TaskApi(TaskBO taskBO, TaskSnapshotFinder taskSnapshotFinder,
+			@Qualifier("taskNewValidator") Validator taskNewValidator,
+			@Qualifier("taskMoveValidator") Validator taskMoveValidator,
+			@Qualifier("taskEditValidator") Validator taskEditValidator) {
+		this.taskBO = taskBO;
+		this.taskSnapshotFinder = taskSnapshotFinder;
+		this.taskNewValidator = taskNewValidator;
+		this.taskMoveValidator = taskMoveValidator;
+		this.taskEditValidator = taskEditValidator;
+	}
 
+	@InitBinder("taskNew")
+	protected void initNewBinder(WebDataBinder binder) {
+		binder.setValidator(taskNewValidator);
+	}
+	
    @InitBinder("taskMove")
    protected void initMoveBinder(WebDataBinder binder) {
       binder.setValidator(taskMoveValidator);
@@ -83,11 +91,12 @@ public class TaskApi {
    @RequestMapping(
       method = RequestMethod.POST,
       consumes = APPLICATION_JSON_VALUE)
-   public ResponseEntity<Task> add(@RequestBody TaskNew taskNew) {
-      TaskSnapshot taskSnapshot = taskBO.add(taskNew.getTasksListId(), taskNew.getBoardId(), taskNew.getTitle(),
-         taskNew.getDescription());
-
-      return new ResponseEntity<>(new Task(taskSnapshot), HttpStatus.OK);
+	public ResponseEntity<Task> add(@Valid @RequestBody TaskNew taskNew) {
+	   TaskSnapshot taskSnapshot = taskBO.add(taskNew.getListId(), taskNew.getTitle(), taskNew.getDescription());
+	   
+       return ResponseEntity
+    		   .ok()
+    		   .body(new Task(taskSnapshot));
    }
 
    @ApiOperation(
