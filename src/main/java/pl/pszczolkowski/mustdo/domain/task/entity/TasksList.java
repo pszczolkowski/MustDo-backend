@@ -73,4 +73,8 @@ public class TasksList
       return new TasksListSnapshot(id, boardId, name, taskSnapshots);
    }
 
+	Long getId() {
+		return id;
+	}
+
 }

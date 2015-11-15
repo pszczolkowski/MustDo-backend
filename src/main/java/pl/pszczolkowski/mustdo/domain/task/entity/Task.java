@@ -67,7 +67,7 @@ public class Task
       if (id == null) {
          throw new EntityInStateNewException();
       }
-      return new TaskSnapshot(id, tasksList.toSnapshot().getId(), boardId, title, description);
+      return new TaskSnapshot(id, tasksList.getId(), boardId, title, description);
    }
 
 }
