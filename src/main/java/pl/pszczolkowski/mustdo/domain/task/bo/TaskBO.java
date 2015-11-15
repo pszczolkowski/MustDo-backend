@@ -4,7 +4,7 @@ import pl.pszczolkowski.mustdo.domain.task.dto.TaskSnapshot;
 
 public interface TaskBO {
 
-   TaskSnapshot add(Long tasksListId, Long boardId, String title, String description);
+   TaskSnapshot add(Long tasksListId, String title, String description);
 
    void moveToAntoherTasksList(Long id, Long tasksListId);
 

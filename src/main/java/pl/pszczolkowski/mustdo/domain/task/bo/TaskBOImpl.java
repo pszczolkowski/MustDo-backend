@@ -26,10 +26,10 @@ public class TaskBOImpl
    }
 
    @Override
-   public TaskSnapshot add(Long tasksListId, Long boardId, String title, String description) {
+   public TaskSnapshot add(Long tasksListId, String title, String description) {
       TasksList tasksList = tasksListRepository.findOne(tasksListId);
 
-      Task task = new Task(tasksList, boardId, title, description);
+      Task task = new Task(tasksList, tasksList.toSnapshot().getBoardId(), title, description);
       task = taskRepository.save(task);
 
       tasksList.addTask(task);
