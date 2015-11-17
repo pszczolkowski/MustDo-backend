@@ -1,6 +1,8 @@
 package pl.pszczolkowski.mustdo.domain.task.finder;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +44,14 @@ public class TasksListSnapshotFinderImpl
 
       return tasksList == null ? null : tasksList.toSnapshot();
    }
+
+	@Override
+	public Map<Long, TasksListSnapshot> findAllAsMap(Set<Long> ids) {
+		List<TasksList> tasksList = tasksListRepository.findAll(ids);
+		return tasksList
+				.stream()
+				.map(TasksList::toSnapshot)
+				.collect(Collectors.toMap(TasksListSnapshot::getId, s -> s));
+	}
 
 }

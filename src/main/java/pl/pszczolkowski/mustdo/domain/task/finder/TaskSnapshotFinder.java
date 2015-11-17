@@ -11,5 +11,7 @@ public interface TaskSnapshotFinder {
    List<TaskSnapshot> findAllByTasksListId( Long tasksListId);
    
    List<TaskSnapshot> findAllByBoardId(Long boardId);
+   
+   List<TaskSnapshot> findRevisions(Long taskId);
 
 }

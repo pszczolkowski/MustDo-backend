@@ -26,10 +26,10 @@ public class TaskBOImpl
    }
 
    @Override
-   public TaskSnapshot add(Long tasksListId, String title, String description) {
+   public TaskSnapshot add(Long tasksListId, String title, String description, Long createdBy) {
       TasksList tasksList = tasksListRepository.findOne(tasksListId);
 
-      Task task = new Task(tasksList, tasksList.toSnapshot().getBoardId(), title, description);
+      Task task = new Task(tasksList, tasksList.toSnapshot().getBoardId(), title, description,createdBy);
       task = taskRepository.save(task);
 
       tasksList.addTask(task);
@@ -45,9 +45,9 @@ public class TaskBOImpl
    }
 
    @Override
-   public void edit(Long id, String title, String description) {
+   public void edit(Long id, String title, String description, Long updatedBy) {
       Task task = taskRepository.findOne(id);
-      task.edit(title, description);
+      task.edit(title, description, updatedBy);
       taskRepository.save(task);
 
       LOGGER.info("Changed title to <{}> and description to <{}> for Task with id <{}>", title, description, id);
@@ -55,17 +55,20 @@ public class TaskBOImpl
    }
 
    @Override
-   public void delete(Long id) {
-      taskRepository.delete(id);
+   public void delete(Long id, Long updatedBy) {
+	  Task task = taskRepository.findOne(id);
+	  task.markAsDeleted(updatedBy);
+	  
+      taskRepository.save(task);
       LOGGER.info("Deleted Task with id <{}>", id);
    }
 
    @Override
-   public void moveToAntoherTasksList(Long id, Long tasksListId) {
+   public void moveToAntoherTasksList(Long id, Long tasksListId, Long updatedBy) {
       TasksList tasksList = tasksListRepository.findOne(tasksListId);
       Task task = taskRepository.findOne(id);
       
-      task.moveToAnotherList(tasksList);
+      task.moveToAnotherList(tasksList, updatedBy);
       taskRepository.save(task);
 
       tasksList.addTask(task);

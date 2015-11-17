@@ -1,11 +1,20 @@
 package pl.pszczolkowski.mustdo.web.restapi.task;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -20,10 +29,11 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import pl.pszczolkowski.mustdo.domain.task.bo.TaskBO;
 import pl.pszczolkowski.mustdo.domain.task.dto.TaskSnapshot;
+import pl.pszczolkowski.mustdo.domain.task.dto.TasksListSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.finder.TaskSnapshotFinder;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import pl.pszczolkowski.mustdo.domain.task.finder.TasksListSnapshotFinder;
+import pl.pszczolkowski.mustdo.domain.user.dto.UserSnapshot;
+import pl.pszczolkowski.mustdo.domain.user.finder.UserSnapshotFinder;
 
 @RestController
 @RequestMapping("/task")
@@ -31,17 +41,23 @@ public class TaskApi {
 
    private final TaskBO taskBO;
    private final TaskSnapshotFinder taskSnapshotFinder;
+   private final UserSnapshotFinder userSnapshotFinder;
+   private final TasksListSnapshotFinder tasksListSnapshotFinder;
    private final Validator taskNewValidator;
    private final Validator taskMoveValidator;
    private final Validator taskEditValidator;
 
 	@Autowired
 	public TaskApi(TaskBO taskBO, TaskSnapshotFinder taskSnapshotFinder,
+			UserSnapshotFinder userSnapshotFinder,
+			TasksListSnapshotFinder tasksListSnapshotFinder,
 			@Qualifier("taskNewValidator") Validator taskNewValidator,
 			@Qualifier("taskMoveValidator") Validator taskMoveValidator,
 			@Qualifier("taskEditValidator") Validator taskEditValidator) {
 		this.taskBO = taskBO;
 		this.taskSnapshotFinder = taskSnapshotFinder;
+		this.userSnapshotFinder = userSnapshotFinder;
+		this.tasksListSnapshotFinder = tasksListSnapshotFinder;
 		this.taskNewValidator = taskNewValidator;
 		this.taskMoveValidator = taskMoveValidator;
 		this.taskEditValidator = taskEditValidator;
@@ -79,7 +95,47 @@ public class TaskApi {
       }
       return new ResponseEntity<>(new Task(taskSnapshot), HttpStatus.OK);
    }
+   
+   private String getLoggedUserName(){
+	   String name = SecurityContextHolder.getContext().getAuthentication().getName();
+	   return name;
+   }
+   
+   @ApiOperation(
+		      value = "Get history of changes in Task with given id",
+		      notes = "Returns Task's history of change")
+		   @ApiResponses({
+		      @ApiResponse(code = 200,
+		         message = "Found Task with id"),
+		      @ApiResponse(code = 404,
+		         message = "Task doesn't exists")})
+		   @RequestMapping(value = "/{id}/history", method = GET)
+	public ResponseEntity<List<Task>> history(@PathVariable("id") Long id) {
+		TaskSnapshot taskSnapshot = taskSnapshotFinder.findOneById(id);
 
+		if (taskSnapshot == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		List<TaskSnapshot> revisions = taskSnapshotFinder.findRevisions(id);
+		Set<Long> userIds = revisions.stream().map(r -> r.getId()).collect(Collectors.toSet());
+	    Map<Long, UserSnapshot> users = userSnapshotFinder.findAllAsMap(userIds);
+	    Set<Long> listIds  = revisions.stream().map(r->r.getTasksListId()).collect(Collectors.toSet());
+	    Map<Long, TasksListSnapshot> lists = tasksListSnapshotFinder.findAllAsMap(listIds);
+	    
+	    
+	    List<Task> tasks = revisions
+	    		  .stream()
+	    		  .map(b -> {
+	    			 UserSnapshot userSnapshot = users.get(b.getUpdatedBy()) ;
+	    			 TasksListSnapshot tasksListSnapshot = lists.get(b.getTasksListId());
+	    			 return new Task(taskSnapshot, userSnapshot.getLogin(), tasksListSnapshot.getName());
+	    		  })
+	    		  .collect(Collectors.toList());
+		
+		return new ResponseEntity<>(tasks, HttpStatus.OK);
+	}
+   
    @ApiOperation(
       value = "Create new Task",
       notes = "Return added Task or BadRequest if given input was invalid")
@@ -92,7 +148,9 @@ public class TaskApi {
       method = RequestMethod.POST,
       consumes = APPLICATION_JSON_VALUE)
 	public ResponseEntity<Task> add(@Valid @RequestBody TaskNew taskNew) {
-	   TaskSnapshot taskSnapshot = taskBO.add(taskNew.getListId(), taskNew.getTitle(), taskNew.getDescription());
+	   String login = getLoggedUserName();
+	   UserSnapshot userSnapshot = userSnapshotFinder.findByLogin(login);
+	   TaskSnapshot taskSnapshot = taskBO.add(taskNew.getListId(), taskNew.getTitle(), taskNew.getDescription(), userSnapshot.getId());
 	   
        return ResponseEntity
     		   .ok()
@@ -109,9 +167,11 @@ public class TaskApi {
       method = RequestMethod.PUT,
       consumes = APPLICATION_JSON_VALUE)
    public ResponseEntity<Task> edit(@Valid @RequestBody TaskEdit taskEdit) {
-      taskBO.edit(taskEdit.getId(), taskEdit.getTitle(), taskEdit.getDescription());
+		String login = getLoggedUserName();
+		UserSnapshot userSnapshot = userSnapshotFinder.findByLogin(login);
+		taskBO.edit(taskEdit.getId(), taskEdit.getTitle(), taskEdit.getDescription(), userSnapshot.getId());
 
-      return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
    }
 
    @ApiOperation(
@@ -125,7 +185,9 @@ public class TaskApi {
       method = RequestMethod.DELETE)
    public ResponseEntity<Task> delete(@PathVariable("id") Long id) {
       if (taskSnapshotFinder.findOneById(id) != null) {
-         taskBO.delete(id);
+    	 String username = getLoggedUserName();
+    	 UserSnapshot userSnapshot = userSnapshotFinder.findByLogin(username);
+         taskBO.delete(id, userSnapshot.getId());
       }
       return new ResponseEntity<>(HttpStatus.OK);
    }
@@ -141,7 +203,9 @@ public class TaskApi {
       method = RequestMethod.POST,
       consumes = APPLICATION_JSON_VALUE)
    public ResponseEntity<Task> move(@Valid @RequestBody TaskMove taskMove) {
-      taskBO.moveToAntoherTasksList(taskMove.getId(), taskMove.getListId());
+	  String login = getLoggedUserName();
+	  UserSnapshot userSnapshot = userSnapshotFinder.findByLogin(login);
+      taskBO.moveToAntoherTasksList(taskMove.getId(), taskMove.getListId(), userSnapshot.getId());
 
       return new ResponseEntity<>(HttpStatus.OK);
 

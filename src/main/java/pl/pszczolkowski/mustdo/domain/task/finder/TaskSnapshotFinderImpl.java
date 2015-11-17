@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.history.Revision;
 
 import pl.pszczolkowski.mustdo.domain.task.dto.TaskSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.entity.Task;
@@ -43,5 +44,16 @@ public class TaskSnapshotFinderImpl
          .stream().map(Task::toSnapshot)
          .collect(Collectors.toList());
    }
-
+   
+   @Override
+	public List<TaskSnapshot> findRevisions(Long taskId) {
+		return taskRepository
+				.findRevisions(taskId)
+				.getContent()
+				.stream()
+				.sorted((a,b) -> b.getRevisionNumber() - a.getRevisionNumber())
+				.map(Revision::getEntity)
+				.map(Task::toSnapshot)
+				.collect(Collectors.toList());
+	}
 }

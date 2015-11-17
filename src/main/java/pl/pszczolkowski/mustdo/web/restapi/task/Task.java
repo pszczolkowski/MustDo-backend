@@ -11,12 +11,20 @@ public class Task {
    private final String title;
    private final String description;
    private final Long listId;
+   private String username;
+   private String listName;
 
    public Task(TaskSnapshot taskSnapshot) {
       this.id = taskSnapshot.getId();
       this.listId = taskSnapshot.getTasksListId();
       this.title = taskSnapshot.getTitle();
       this.description = taskSnapshot.getDescription();
+   }
+   
+   public Task(TaskSnapshot taskSnapshot, String username, String listName){
+	   this(taskSnapshot);
+	   this.username = username;
+	   this.listName = listName;
    }
 
    @ApiModelProperty("Task unique identifier")
@@ -38,5 +46,15 @@ public class Task {
    public Long getListId() {
       return listId;
    }
+   
+   @ApiModelProperty("Name of List that Task is linked to")
+	public String getListName() {
+		return listName;
+	}
+   
+   @ApiModelProperty("Author of change in Task")
+	public String getUsername() {
+		return username;
+	}
 
 }

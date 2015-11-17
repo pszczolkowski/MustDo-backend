@@ -4,12 +4,12 @@ import pl.pszczolkowski.mustdo.domain.task.dto.TaskSnapshot;
 
 public interface TaskBO {
 
-   TaskSnapshot add(Long tasksListId, String title, String description);
+   TaskSnapshot add(Long tasksListId, String title, String description, Long createdBy);
 
-   void moveToAntoherTasksList(Long id, Long tasksListId);
+   void moveToAntoherTasksList(Long id, Long tasksListId, Long updatedBy);
 
-   void edit(Long id, String title, String description);
+   void edit(Long id, String title, String description, Long updatedBy);
 
-   void delete(Long id);
+   void delete(Long id, Long updatedBy);
 
 }
