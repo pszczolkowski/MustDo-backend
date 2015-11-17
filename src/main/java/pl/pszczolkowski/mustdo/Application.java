@@ -15,11 +15,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import pl.pszczolkowski.mustdo.sharedkernel.enversrevision.EnversRevisionRepository;
+import pl.pszczolkowski.mustdo.sharedkernel.enversrevision.EnversRevisionRepositoryFactoryBean;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableJpaRepositories(repositoryFactoryBeanClass = EnversRevisionRepository.class)
+@EnableJpaRepositories(repositoryFactoryBeanClass = EnversRevisionRepositoryFactoryBean.class)
 @EnableAsync
 public class Application {
 
