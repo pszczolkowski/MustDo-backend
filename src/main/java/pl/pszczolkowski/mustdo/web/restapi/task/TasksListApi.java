@@ -1,4 +1,4 @@
-package pl.pszczolkowski.mustdo.web.restapi.tasksList;
+package pl.pszczolkowski.mustdo.web.restapi.task;
 
 import java.util.List;
 import java.util.stream.Collectors;
