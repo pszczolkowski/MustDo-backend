@@ -64,18 +64,30 @@ public class TaskBOImpl
    }
 
    @Override
-   public void moveToAntoherTasksList(Long id, Long tasksListId, Long updatedBy) {
-      TasksList tasksList = tasksListRepository.findOne(tasksListId);
+   public void moveToAntoherTasksList(Long id, Long tasksListId, int position, Long updatedBy) {
       Task task = taskRepository.findOne(id);
+      TasksList tasksList =tasksListRepository.findOne(task.toSnapshot().getTasksListId());
       
-      task.moveToAnotherList(tasksList, updatedBy);
-      taskRepository.save(task);
-
-      tasksList.addTask(task);
+      tasksList.removeTaskFromTasksList(task);
+      tasksListRepository.save(tasksList);
+      tasksList = tasksListRepository.findOne(tasksListId);
+      tasksList.addTaskOnPosition(task,position);
       tasksListRepository.save(tasksList);
 
       LOGGER.info("Moved Task with id <{}> to TasksList with id <{}>", id, tasksListId);
 
    }
+
+	@Override
+	public void changePosition(Long taskId, int position, Long updatedBy) {
+		Task task = taskRepository.findOne(taskId);
+		TasksList tasksList = tasksListRepository.findOne(task.toSnapshot().getTasksListId());
+		
+		tasksList.changePositionOfTask(taskId, position);
+		
+		tasksListRepository.save(tasksList);
+		
+		LOGGER.info("Moved Task with id <{}> to position <{}>", taskId, position);
+	}
 
 }

@@ -205,8 +205,18 @@ public class TaskApi {
    public ResponseEntity<Task> move(@Valid @RequestBody TaskMove taskMove) {
 	  String login = getLoggedUserName();
 	  UserSnapshot userSnapshot = userSnapshotFinder.findByLogin(login);
-      taskBO.moveToAntoherTasksList(taskMove.getId(), taskMove.getListId(), userSnapshot.getId());
-
+	  TaskSnapshot taskSnapshot = taskSnapshotFinder.findOneById(taskMove.getId());
+	  
+	  if(taskSnapshot == null){
+		  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	  }
+	  
+	  if(taskMove.getListId() == null || taskSnapshot.getTasksListId().equals(taskMove.getListId())){
+		  taskBO.changePosition(taskMove.getId(), taskMove.getPosition(), userSnapshot.getId());
+	  }else{
+		  taskBO.moveToAntoherTasksList(taskMove.getId(), taskMove.getListId(),taskMove.getPosition(), userSnapshot.getId());
+	  }
+	  
       return new ResponseEntity<>(HttpStatus.OK);
 
    }

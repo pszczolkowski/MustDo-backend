@@ -49,7 +49,7 @@ public class Task extends AbstractAuditingEntity
    
    @NotNull
    @Min(0)
-   private int position;
+   protected int position;
    
    @NotNull
    @Audited
@@ -84,11 +84,10 @@ public class Task extends AbstractAuditingEntity
 	   this.updatedBy = updatedBy;
 	   this.updatedAt = LocalDateTimePersistenceConverter.convertToDatabaseColumnValue(now());
    }
-
-   public void moveToAnotherList(TasksList tasksListId, Long updatedBy) {
-      this.tasksList = tasksListId;
-      this.updatedBy = updatedBy;
-      this.updatedAt = LocalDateTimePersistenceConverter.convertToDatabaseColumnValue(now());
+   
+   void changeTasksList(TasksList tasksList, int position){
+	   this.position = position;
+	   this.tasksList = tasksList;
    }
 
    public TaskSnapshot toSnapshot() {
@@ -102,4 +101,11 @@ public class Task extends AbstractAuditingEntity
       return new TaskSnapshot(id, tasksList.getId(), boardId, title, description, createdAtExport, updatedAtExport, createdBy, updatedBy);
    }
 
+   protected Long getId(){
+	   return this.id;
+   }
+   
+   void setPosition(int position){
+	   this.position = position;
+   }
 }
