@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pl.pszczolkowski.mustdo.domain.task.dto.TaskSnapshot;
+import pl.pszczolkowski.mustdo.domain.task.entity.Comment;
 import pl.pszczolkowski.mustdo.domain.task.entity.Task;
 import pl.pszczolkowski.mustdo.domain.task.entity.TasksList;
+import pl.pszczolkowski.mustdo.domain.task.repository.CommentRepository;
 import pl.pszczolkowski.mustdo.domain.task.repository.TaskRepository;
 import pl.pszczolkowski.mustdo.domain.task.repository.TasksListRepository;
 import pl.pszczolkowski.mustdo.sharedkernel.annotations.BussinesObject;
@@ -18,11 +20,13 @@ public class TaskBOImpl
    private static final Logger LOGGER = LoggerFactory.getLogger(TaskBOImpl.class);
    private final TaskRepository taskRepository;
    private final TasksListRepository tasksListRepository;
+   private final CommentRepository commentRepository;
 
    @Autowired
-   public TaskBOImpl(TaskRepository taskRepository, TasksListRepository tasksListRepository) {
+   public TaskBOImpl(TaskRepository taskRepository, TasksListRepository tasksListRepository, CommentRepository commentRepository) {
       this.taskRepository = taskRepository;
       this.tasksListRepository = tasksListRepository;
+      this.commentRepository = commentRepository;
    }
 
    @Override
@@ -88,6 +92,16 @@ public class TaskBOImpl
 		tasksListRepository.save(tasksList);
 		
 		LOGGER.info("Moved Task with id <{}> to position <{}>", taskId, position);
+	}
+
+	@Override
+	public void addComment(Long taskId, String text) {
+		Task task = taskRepository.findOne(taskId);
+		Comment comment = new Comment(task, text);
+		comment = commentRepository.save(comment);
+		
+		task.addComment(comment);
+		taskRepository.save(task);
 	}
 
 }

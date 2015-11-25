@@ -220,5 +220,27 @@ public class TaskApi {
       return new ResponseEntity<>(HttpStatus.OK);
 
    }
+   
+	@RequestMapping(value = "/comment",
+					method = RequestMethod.POST,
+					consumes = APPLICATION_JSON_VALUE)
+	public ResponseEntity<Task> addComment(@Valid @RequestBody CommentNew commentNew) {
+		TaskSnapshot taskSnapshot = taskSnapshotFinder.findOneById(commentNew.getTaskId());
+		if(taskSnapshot == null){
+			return new ResponseEntity<Task>(HttpStatus.BAD_REQUEST);
+		}
+		taskBO.addComment(taskSnapshot.getId(), commentNew.getText());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "{taskId}/comment", method = RequestMethod.GET)
+	public ResponseEntity<List<Comment>> list(@PathVariable("taskId") Long taskId) {
+		TaskSnapshot taskSnapshot = taskSnapshotFinder.findOneById(taskId);
+		if(taskSnapshot == null){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		Task task = new Task(taskSnapshot);
+		return new ResponseEntity<>(task.getComments(), HttpStatus.OK);
+}
 
 }
