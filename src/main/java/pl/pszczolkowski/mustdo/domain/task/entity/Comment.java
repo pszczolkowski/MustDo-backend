@@ -35,6 +35,8 @@ public class Comment {
 	@NotEmpty
 	private String text;
 	
+	protected Comment(){}
+	
 	public Comment(Task task, String text) {
 		this.task = task;
 		this.text = text;
@@ -45,8 +47,7 @@ public class Comment {
 		if(this.id == null){
 			throw new EntityInStateNewException();
 		}
-		TaskSnapshot taskSnapshot = task.toSnapshot();
 		LocalDateTime createdAtExport = LocalDateTimePersistenceConverter.convertToEntityAttributeValue(this.createdAt);
-		return new CommentSnapshot(id, taskSnapshot.getId(), text, createdAtExport);
+		return new CommentSnapshot(id, task.getId(), text, createdAtExport);
 	}
 }
