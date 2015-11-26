@@ -21,6 +21,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 
 import pl.pszczolkowski.mustdo.config.persistance.converter.LocalDateTimePersistenceConverter;
@@ -59,6 +61,7 @@ public class Task extends AbstractAuditingEntity
 	protected int position;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "task", orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<Comment> comments = new ArrayList<>();
 
 	@NotNull
