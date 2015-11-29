@@ -9,7 +9,9 @@ import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.board.entity.Board;
 import pl.pszczolkowski.mustdo.domain.board.event.BoardRemovedEvent;
 import pl.pszczolkowski.mustdo.domain.board.exception.BoardAlreadyExistException;
+import pl.pszczolkowski.mustdo.domain.board.exception.TeamNotExistException;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
+import pl.pszczolkowski.mustdo.domain.team.finder.TeamSnapshotFinder;
 import pl.pszczolkowski.mustdo.sharedkernel.annotations.BussinesObject;
 
 @BussinesObject
@@ -19,19 +21,24 @@ public class BoardBOImpl
    private static final Logger LOGGER = LoggerFactory.getLogger(BoardBOImpl.class);
    private final BoardRepository boardRepository;
    private final ApplicationEventPublisher eventPublisher;
+   private final TeamSnapshotFinder teamSnapshotFinder;
 
    @Autowired
-   public BoardBOImpl(BoardRepository boardRepository, ApplicationEventPublisher eventPublisher) {
+   public BoardBOImpl(BoardRepository boardRepository, ApplicationEventPublisher eventPublisher, TeamSnapshotFinder teamSnapshotFinder) {
       this.boardRepository = boardRepository;
       this.eventPublisher = eventPublisher;
+      this.teamSnapshotFinder = teamSnapshotFinder;
    }
 
    @Override
-   public BoardSnapshot add(String name) {
+   public BoardSnapshot add(String name, Long teamId) {
       if (boardRepository.findOneByName(name) != null) {
          throw new BoardAlreadyExistException();
       }
-      Board board = new Board(name);
+      if (teamSnapshotFinder.findById(teamId) == null) {
+         throw new TeamNotExistException();
+      }
+      Board board = new Board(name, teamId);
 
       board = boardRepository.save(board);
 

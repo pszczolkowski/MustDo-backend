@@ -4,7 +4,7 @@ import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 
 public interface BoardBO {
 
-   BoardSnapshot add(String name);
+   BoardSnapshot add(String name, Long teamId);
 
    BoardSnapshot rename(Long id, String name);
 
