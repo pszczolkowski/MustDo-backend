@@ -1,6 +1,7 @@
 package pl.pszczolkowski.mustdo.web.restapi.board;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -83,8 +84,13 @@ public class BoardApi {
 	    @ApiResponse(code = 200,  message = "Found list with all boards")})
    @RequestMapping(method = GET)
    public HttpEntity<List<Board>> list() {
+      UserSnapshot userSnapshot = getLoggedUserSnapshot();
+      Set<Long> userTeamIds = teamSnapshotFinder.findAllByUserId(userSnapshot.getId())
+         .stream()
+         .map(TeamSnapshot::getId)
+         .collect(Collectors.toSet());
       List<Board> boards = boardSnapshotFinder
-    		  .findAll()
+    		  .findAllByTeamIdIn(userTeamIds)
     		  .stream()
     		  .map(Board::new)
     		  .collect(Collectors.toList());
