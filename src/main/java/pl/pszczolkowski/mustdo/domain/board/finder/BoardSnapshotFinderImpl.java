@@ -1,5 +1,6 @@
 package pl.pszczolkowski.mustdo.domain.board.finder;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,21 @@ public class BoardSnapshotFinderImpl
       Board board = boardRepository.findOneByName(name);
 
       return board == null ? null : board.toSnapshot();
+   }
+
+   @Override
+   public List<BoardSnapshot> findAllByTeamId(Long teamId) {
+      return boardRepository.findAllByTeamId(teamId)
+         .stream()
+         .map(Board::toSnapshot)
+         .collect(Collectors.toList());
+   }
+   @Override
+   public List<BoardSnapshot> findAllByTeamIdIn(Collection<Long> ids) {
+      return boardRepository.findAllByTeamIdIn(ids)
+         .stream()
+         .map(Board::toSnapshot)
+         .collect(Collectors.toList());
    }
 
 }
