@@ -103,6 +103,7 @@ public class BoardApi {
 		notes = "Returns board with given id, return BadRequest if not found")
    @ApiResponses({
 		@ApiResponse(code = 200, message = "Found board with given id"),
+		@ApiResponse(code = 403, message = "Board not available for current user"),
 		@ApiResponse(code = 404, message = "Board doesn't exists")})
    @RequestMapping(value = "/{boardId}",
       method = GET)
@@ -111,7 +112,11 @@ public class BoardApi {
       if (boardSnapshot == null) {
          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
       }
-
+      UserSnapshot userSnapshot = getLoggedUserSnapshot();
+      TeamSnapshot teamSnapshot = teamSnapshotFinder.findById(boardSnapshot.getTeamId());
+      if(!teamSnapshot.getTeamMembersIds().contains(userSnapshot.getId())){
+         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+      }
       return new ResponseEntity<>(new Board(boardSnapshot), HttpStatus.OK);
    }
 
