@@ -164,7 +164,15 @@ public class BoardApi {
 		value = "/{boardId}",
         method = RequestMethod.DELETE)
    public HttpEntity<Board> delete(@PathVariable("boardId") Long boardId) {
-      boardBO.delete(boardId);
+      BoardSnapshot boardSnapshot = boardSnapshotFinder.findOneById(boardId);
+      if(boardSnapshot != null){
+         UserSnapshot userSnapshot = getLoggedUserSnapshot();
+         TeamSnapshot teamSnapshot = teamSnapshotFinder.findById(boardSnapshot.getTeamId());
+         if (!teamSnapshot.getTeamMembersIds().contains(userSnapshot.getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+         }
+         boardBO.delete(boardId);
+      }
       return new ResponseEntity<>(HttpStatus.OK);
    }
 
