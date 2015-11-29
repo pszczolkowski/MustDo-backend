@@ -30,4 +30,10 @@ public class TeamSnapshotFinderImpl
          .collect(Collectors.toList());
    }
 
+	@Override
+	public TeamSnapshot findById(Long teamId) {
+		Team team = teamRepositry.findOne(teamId);
+		return team == null ? null : team.toSnapshot();
+	}
+
 }

@@ -13,5 +13,4 @@ public interface TeamRepository
    
    @Query("SELECT t FROM Team t INNER JOIN t.teamMembersIds m WHERE m = :userId")
    List<Team> findAllByUserId( @Param("userId") Long userId);
-
 }
