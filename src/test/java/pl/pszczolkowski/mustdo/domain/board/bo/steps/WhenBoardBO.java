@@ -25,11 +25,13 @@ public class WhenBoardBO extends Stage<WhenBoardBO>{
 	private BoardBO boardBO;
 	@ExpectedScenarioState
 	private String name;
+	@ExpectedScenarioState
+	private Long teamId;
 	
 	
 	public void addBoard_is_invoked() {
 		try{
-			boardSnapshot = boardBO.add(name);		
+			boardSnapshot = boardBO.add(name, teamId);		
 		}catch(BoardAlreadyExistException e){
 			boardAlreadyExistExceptionThrown = true;
 		}

@@ -13,6 +13,8 @@ public class GivenBoardBO extends Stage<GivenBoardBO>{
 	@ProvidedScenarioState
 	private String name;
 	@ProvidedScenarioState
+	private Long teamId;
+	@ProvidedScenarioState
 	private BoardSnapshot boardSnapshot;
 	
 	@ExpectedScenarioState
@@ -23,18 +25,23 @@ public class GivenBoardBO extends Stage<GivenBoardBO>{
 		return this;
 	}
 	
-	public GivenBoardBO a_board_with_name(String name) {
-		Board board = new Board(name);
+	public GivenBoardBO a_board_with_name_and_teamID(String name, Long teamId) {
+		Board board = new Board(name, teamId);
 		board = boardRepository.save(board);
 		boardSnapshot = board.toSnapshot();
 		return this;
 		
 	}
 
-	public GivenBoardBO other_board_with_name(String name) {
-		Board board = new Board(name);
+	public GivenBoardBO other_board_with_name_and_team_id(String name, Long teamId) {
+		Board board = new Board(name, teamId);
 		board = boardRepository.save(board);
 		return this;
 	}
+
+   public GivenBoardBO a_team_id_for_board(Long teamId) {
+      this.teamId = teamId;
+      return this;
+   }
 
 }

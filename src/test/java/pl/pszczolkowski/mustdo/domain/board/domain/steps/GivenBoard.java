@@ -12,23 +12,25 @@ public class GivenBoard extends Stage<GivenBoard>{
 	private Board board;
 	@ProvidedScenarioState
 	private String name = GivenBoard.class.getSimpleName();
+	@ProvidedScenarioState
+   private Long teamID = 3L;
 	
 	@ExpectedScenarioState
 	private BoardRepository boardRepository;
 
 
 	public void a_not_persisted_board() {
-		board = new Board(name);
+		board = new Board(name, teamID);
 	}
 
 	public void a_persisted_board() {
-		board = new Board(name);
+		board = new Board(name, teamID);
 		boardRepository.save(board);
 		
 	}
 
 	public GivenBoard a_persisted_board_with_name(String clazz) {
-		board = new Board(name);
+		board = new Board(name, teamID);
 		boardRepository.save(board);
 		return this;
 	}

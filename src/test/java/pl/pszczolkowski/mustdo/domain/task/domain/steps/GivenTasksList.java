@@ -12,6 +12,7 @@ import pl.pszczolkowski.mustdo.domain.task.repository.TasksListRepository;
 
 public class GivenTasksList extends Stage<GivenTasksList>{
 	
+   private static final long TEAM_ID = 2l;
 	@ExpectedScenarioState
 	private BoardRepository boardRepository;
 	@ExpectedScenarioState
@@ -25,7 +26,7 @@ public class GivenTasksList extends Stage<GivenTasksList>{
 	private TasksList tasksList;
 	
 	public GivenTasksList a_board() {
-		Board board = new Board(name);
+		Board board = new Board(name, TEAM_ID);
 		board = boardRepository.save(board);
 		boardSnapshot = board.toSnapshot();
 		return this;
