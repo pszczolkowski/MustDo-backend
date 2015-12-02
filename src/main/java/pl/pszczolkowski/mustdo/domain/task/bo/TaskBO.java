@@ -15,4 +15,6 @@ public interface TaskBO {
 	void changePosition(Long id, int position, Long updatedBy);
 
 	void addComment(Long taskId, String text);
+   
+   void assignTask(Long taskId, Long userId);
 }

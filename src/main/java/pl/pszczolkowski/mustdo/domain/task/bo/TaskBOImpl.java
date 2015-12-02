@@ -103,5 +103,14 @@ public class TaskBOImpl
 		task.addComment(comment);
 		taskRepository.save(task);
 	}
+   
+   @Override
+   public void assignTask(Long taskId, Long userId){
+      Task task = taskRepository.findOne(userId);
+      task.assignTask(userId);
+      taskRepository.save(task);
+      
+      LOGGER.info("Task with id <{}> assigned to user with id<{}>", taskId, userId);
+   }
 
 }
