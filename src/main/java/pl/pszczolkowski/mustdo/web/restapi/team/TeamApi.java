@@ -64,7 +64,7 @@ public class TeamApi {
 				.body(teams);
 		
 	}
-	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public HttpEntity<Team> get(@PathVariable("id") Long teamId){
 		TeamSnapshot teamSnapshot = teamSnapshotFinder.findById(teamId);
 		if(teamSnapshot == null){
