@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
+import pl.pszczolkowski.mustdo.domain.board.finder.BoardSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
 import pl.pszczolkowski.mustdo.domain.team.dto.TeamSnapshot;
 import pl.pszczolkowski.mustdo.domain.team.finder.TeamSnapshotFinder;
@@ -30,9 +33,11 @@ public class TeamApi {
 	private final TeamSnapshotFinder teamSnapshotFinder;
 	private final TeamBO teamBO;
 	private final UserSnapshotFinder userSnapshotFinder;
+	private final BoardSnapshotFinder boardSnapshotFinder;
 	
 	@Autowired
-	public TeamApi(TeamSnapshotFinder teamSnapshotFinder, TeamBO teamBO, UserSnapshotFinder userSnapshotFinder){
+	public TeamApi(TeamSnapshotFinder teamSnapshotFinder, TeamBO teamBO, UserSnapshotFinder userSnapshotFinder, BoardSnapshotFinder boardSnapshotFinder){
+		this.boardSnapshotFinder = boardSnapshotFinder;
 		this.teamSnapshotFinder = teamSnapshotFinder;
 		this.teamBO = teamBO;
 		this.userSnapshotFinder = userSnapshotFinder;
@@ -65,6 +70,24 @@ public class TeamApi {
 		if(teamSnapshot == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
+		
+		if(!isCurrentLoggedUserTeamMember(teamSnapshot)){
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		List<Member> members = getMemberSnapshot(teamSnapshot.getTeamMembersIds());
+		Team team = new Team(teamSnapshot, members);
+		return ResponseEntity
+				.ok()
+				.body(team);
+	}
+	@RequestMapping(params = {"boardId"}, method = RequestMethod.GET)
+	public HttpEntity<Team> getByBoardId(@RequestParam("boardId") Long boardId){
+      BoardSnapshot boardSnapshot = boardSnapshotFinder.findOneById(boardId);
+      if(boardSnapshot == null ){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+		TeamSnapshot teamSnapshot = teamSnapshotFinder.findById(boardSnapshot.getTeamId());
 		
 		if(!isCurrentLoggedUserTeamMember(teamSnapshot)){
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
