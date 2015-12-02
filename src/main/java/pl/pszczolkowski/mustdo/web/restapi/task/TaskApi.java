@@ -46,6 +46,7 @@ public class TaskApi {
    private final Validator taskNewValidator;
    private final Validator taskMoveValidator;
    private final Validator taskEditValidator;
+   private final Validator taskAssignValidator;
 
 	@Autowired
 	public TaskApi(TaskBO taskBO, TaskSnapshotFinder taskSnapshotFinder,
@@ -53,6 +54,7 @@ public class TaskApi {
 			TasksListSnapshotFinder tasksListSnapshotFinder,
 			@Qualifier("taskNewValidator") Validator taskNewValidator,
 			@Qualifier("taskMoveValidator") Validator taskMoveValidator,
+			@Qualifier("taskAssignValidator") Validator taskAssignValidator,
 			@Qualifier("taskEditValidator") Validator taskEditValidator) {
 		this.taskBO = taskBO;
 		this.taskSnapshotFinder = taskSnapshotFinder;
@@ -61,6 +63,7 @@ public class TaskApi {
 		this.taskNewValidator = taskNewValidator;
 		this.taskMoveValidator = taskMoveValidator;
 		this.taskEditValidator = taskEditValidator;
+		this.taskAssignValidator = taskAssignValidator;
 	}
 
 	@InitBinder("taskNew")
@@ -76,6 +79,10 @@ public class TaskApi {
    @InitBinder("taskEdit")
    protected void initEditBinder(WebDataBinder binder) {
       binder.setValidator(taskEditValidator);
+   }
+   @InitBinder("taskEdit")
+   protected void initAssignBinder(WebDataBinder binder) {
+      binder.setValidator(taskAssignValidator);
    }
 
    @ApiOperation(
@@ -243,7 +250,7 @@ public class TaskApi {
 		return new ResponseEntity<>(task.getComments(), HttpStatus.OK);
    }
    
-	@RequestMapping(value = "{taskId}/assign", method = RequestMethod.GET)
+	@RequestMapping(value = "{taskId}/assign", method = RequestMethod.POST)
    public ResponseEntity<Task> assignTask(@Valid @RequestBody TaskAssign taskAssign){
       taskBO.assignTask(taskAssign.getTaskId(), taskAssign.getUserId());
       return new ResponseEntity<>(HttpStatus.OK);
