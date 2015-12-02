@@ -24,7 +24,7 @@ public class GivenBoardDeleteEndpoint extends Stage<GivenBoardDeleteEndpoint>{
 	private MockHttpServletRequestBuilder request;
 	
 	public GivenBoardDeleteEndpoint a_board() {
-		boardSnapshot = boardBO.add(CLAZZ);
+		boardSnapshot = boardBO.add(CLAZZ,1l);
 		return this;
 	}
 

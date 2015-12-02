@@ -35,7 +35,7 @@ public class GivenTasksListAddEndpoint extends Stage<GivenTasksListAddEndpoint>{
 	private TasksListNew tasksListNew;
 	
 	public GivenTasksListAddEndpoint a_board() {
-		boardSnapshot = boardBO.add(CLAZZ);
+		boardSnapshot = boardBO.add(CLAZZ,1l);
 		return this;
 	}
 

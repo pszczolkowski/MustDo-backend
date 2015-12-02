@@ -30,7 +30,7 @@ public class GivenBoardRenameEndpoint extends Stage<GivenBoardRenameEndpoint>{
 	private BoardBO boardBO;
 	
 	public GivenBoardRenameEndpoint a_board_with_name(String name) {
-		boardSnapshot = boardBO.add(name);
+		boardSnapshot = boardBO.add(name,1l);
 		return this;
 	}
 
