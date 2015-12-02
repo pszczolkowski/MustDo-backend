@@ -17,6 +17,7 @@ public class Task {
    private String username;
    private String listName;
    private List<Comment> comments;
+   private Long assignedTo;
 
    public Task(TaskSnapshot taskSnapshot) {
       this.id = taskSnapshot.getId();
@@ -27,6 +28,7 @@ public class Task {
     		  .getCommentSnapshots()
     		  .stream().map(Comment::new)
     		  .collect(Collectors.toList());
+      this.assignedTo = taskSnapshot.getAssignedTo();
    }
    
    public Task(TaskSnapshot taskSnapshot, String username, String listName){
@@ -67,7 +69,12 @@ public class Task {
    
    @ApiModelProperty("Comments assigned to Task")
    public List<Comment> getComments() {
-	return comments;
-}
+      return comments;
+   }
+   
+   @ApiModelProperty("User that task is assigned to")
+   public Long getAssignedTo(){
+      return assignedTo;
+   }
 
 }

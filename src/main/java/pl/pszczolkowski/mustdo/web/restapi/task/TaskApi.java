@@ -250,7 +250,7 @@ public class TaskApi {
 		return new ResponseEntity<>(task.getComments(), HttpStatus.OK);
    }
    
-	@RequestMapping(value = "{taskId}/assign", method = RequestMethod.POST)
+	@RequestMapping(value = "/assign", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE)
    public ResponseEntity<Task> assignTask(@Valid @RequestBody TaskAssign taskAssign){
       taskBO.assignTask(taskAssign.getTaskId(), taskAssign.getUserId());
       return new ResponseEntity<>(HttpStatus.OK);

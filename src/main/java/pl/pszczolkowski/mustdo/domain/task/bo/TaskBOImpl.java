@@ -106,7 +106,7 @@ public class TaskBOImpl
    
    @Override
    public void assignTask(Long taskId, Long userId){
-      Task task = taskRepository.findOne(userId);
+      Task task = taskRepository.findOne(taskId);
       task.assignTask(userId);
       taskRepository.save(task);
       
