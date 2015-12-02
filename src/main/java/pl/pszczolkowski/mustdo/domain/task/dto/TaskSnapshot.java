@@ -15,8 +15,10 @@ public class TaskSnapshot {
    private final Long createdBy;
    private final Long updatedBy;
    private final List<CommentSnapshot> commentSnapshots;
+   private final Long assignedTo;
 
-   public TaskSnapshot(Long id, Long tasksListId, Long boardId, String title, String description, LocalDateTime createdAt, LocalDateTime updatedAt, Long createdBy, Long updatedBy, List<CommentSnapshot> commentSnapshots) {
+   public TaskSnapshot(Long id, Long tasksListId, Long boardId, String title, String description, LocalDateTime createdAt, LocalDateTime updatedAt, 
+      Long createdBy, Long updatedBy, List<CommentSnapshot> commentSnapshots, Long assignedTo) {
       this.id = id;
       this.tasksListId = tasksListId;
       this.boardId = boardId;
@@ -27,6 +29,7 @@ public class TaskSnapshot {
       this.createdBy = createdBy;
       this.updatedBy = updatedBy;
       this.commentSnapshots = commentSnapshots;
+      this.assignedTo = assignedTo;
    }
 
    public Long getId() {
@@ -68,4 +71,8 @@ public class TaskSnapshot {
 	public List<CommentSnapshot> getCommentSnapshots() {
 		return commentSnapshots;
 	}
+   
+   public Long getAssignedTo(){
+      return assignedTo;
+   }
 }

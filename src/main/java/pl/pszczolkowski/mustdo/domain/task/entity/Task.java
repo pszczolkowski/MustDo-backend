@@ -1,7 +1,5 @@
 package pl.pszczolkowski.mustdo.domain.task.entity;
 
-import static java.time.LocalDateTime.now;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,6 +29,8 @@ import pl.pszczolkowski.mustdo.domain.task.dto.CommentSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.dto.TaskSnapshot;
 import pl.pszczolkowski.mustdo.sharedkernel.enversrevision.AuditComparable;
 import pl.pszczolkowski.mustdo.sharedkernel.exception.EntityInStateNewException;
+
+import static java.time.LocalDateTime.now;
 
 @Entity
 public class Task extends AbstractAuditingEntity
@@ -68,6 +68,8 @@ public class Task extends AbstractAuditingEntity
 	@Audited
 	@AuditComparable
 	private Boolean deleted;
+   
+   private Long assignedTo;
 
    protected Task() {
    }
@@ -112,7 +114,7 @@ public class Task extends AbstractAuditingEntity
       LocalDateTime updatedAtExport = LocalDateTimePersistenceConverter.convertToEntityAttributeValue(this.updatedAt);
       List<CommentSnapshot> commentsExport = Collections.unmodifiableList(this.comments.stream().map(Comment::toSnapshot).collect(Collectors.toList()));
       
-      return new TaskSnapshot(id, tasksList.getId(), boardId, title, description, createdAtExport, updatedAtExport, createdBy, updatedBy, commentsExport);
+      return new TaskSnapshot(id, tasksList.getId(), boardId, title, description, createdAtExport, updatedAtExport, createdBy, updatedBy, commentsExport, assignedTo);
    }
 
    protected Long getId(){
@@ -126,4 +128,8 @@ public class Task extends AbstractAuditingEntity
 	public void addComment(Comment comment) {
 		comments.add(comment);
 	}
+   
+   public void assignTask(Long userId){
+      this.assignedTo = userId;
+   }
 }
