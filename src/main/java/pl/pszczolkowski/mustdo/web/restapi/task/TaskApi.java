@@ -1,8 +1,5 @@
 package pl.pszczolkowski.mustdo.web.restapi.task;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +31,9 @@ import pl.pszczolkowski.mustdo.domain.task.finder.TaskSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.task.finder.TasksListSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.user.dto.UserSnapshot;
 import pl.pszczolkowski.mustdo.domain.user.finder.UserSnapshotFinder;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping("/task")
@@ -241,6 +241,12 @@ public class TaskApi {
 		}
 		Task task = new Task(taskSnapshot);
 		return new ResponseEntity<>(task.getComments(), HttpStatus.OK);
-}
+   }
+   
+	@RequestMapping(value = "{taskId}/assign", method = RequestMethod.GET)
+   public ResponseEntity<Task> assignTask(@Valid @RequestBody TaskAssign taskAssign){
+      taskBO.assignTask(taskAssign.getTaskId(), taskAssign.getUserId());
+      return new ResponseEntity<>(HttpStatus.OK);
+   }
 
 }
