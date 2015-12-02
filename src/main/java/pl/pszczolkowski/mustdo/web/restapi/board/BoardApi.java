@@ -133,7 +133,7 @@ public class BoardApi {
       BoardSnapshot boardSnapshot;
       if (boardNew.getExistingTeamId() == null) {
          UserSnapshot userSnapshot = getLoggedUserSnapshot();
-         TeamSnapshot teamSnapshot = teamBO.add(boardNew.getNewTeamName(), userSnapshot.getId());
+         TeamSnapshot teamSnapshot = teamBO.add(boardNew.getTeamName(), userSnapshot.getId());
          boardSnapshot = boardBO.add(boardNew.getName(), teamSnapshot.getId());
       } else {
          boardSnapshot = boardBO.add(boardNew.getName(), boardNew.getExistingTeamId());

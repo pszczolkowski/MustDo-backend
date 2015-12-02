@@ -35,11 +35,11 @@ public class BoardNewValidator
       }
       
       if(teamIsNotSpecified(boardNew)){
-         errors.rejectValue("team", "BoardTeamIsNotSet");
+         errors.rejectValue("teamName", "BoardTeamIsNotSet");
       }
       if(!teamIdIsNull(boardNew)){
          if(!teamWithGivenIdExist(boardNew)){
-            errors.rejectValue("team", "TeamWithGivenIdDoesNotExists");
+            errors.rejectValue("teamName", "TeamWithGivenIdDoesNotExists");
          }
       }
    }
@@ -53,7 +53,7 @@ public class BoardNewValidator
    }
 
    private static boolean newTeamNameIsNull(BoardNew boardNew) {
-      return boardNew.getNewTeamName() == null;
+      return boardNew.getTeamName() == null;
    }
 
    private static boolean teamIdIsNull(BoardNew boardNew) {

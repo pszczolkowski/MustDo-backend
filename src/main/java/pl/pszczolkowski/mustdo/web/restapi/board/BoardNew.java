@@ -16,7 +16,7 @@ public class BoardNew {
 
    private Long existingTeamId;
 
-   private String newTeamName;
+   private String teamName;
 
    @ApiModelProperty(
       value = "Name of board",
@@ -41,14 +41,14 @@ public class BoardNew {
    }
 
    @ApiModelProperty(
-      value = "Name of a new team that board will be assigned to",
+      value = "Name of a new team that will be assigned to board",
       required = true)
-   public String getNewTeamName() {
-      return newTeamName;
+   public String getTeamName() {
+      return teamName;
    }
 
-   public void setNewTeamName(String newTeamName) {
-      this.newTeamName = newTeamName;
+   public void setTeamName(String newTeamName) {
+      this.teamName = newTeamName;
    }
 
 }
