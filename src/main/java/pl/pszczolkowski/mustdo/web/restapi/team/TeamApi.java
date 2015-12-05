@@ -129,8 +129,12 @@ public class TeamApi {
 	}
 	
 	@RequestMapping(value = "/member", method = RequestMethod.POST)
-	public HttpEntity<Void> addMember(@Valid @RequestBody NewMember newMember){
-		UserSnapshot userSnapshot = userSnapshotFinder.findByLogin(newMember.getLogin());
+	public HttpEntity<Void> addMember(@Valid @RequestBody NewMember newMember) {
+		UserSnapshot userSnapshot = userSnapshotFinder.findById(newMember.getUserId());
+		if (userSnapshot == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+		}
+		
 		TeamSnapshot teamSnapshot = teamSnapshotFinder.findById(newMember.getTeamId());
 		if(isUserTeamMember(userSnapshot, teamSnapshot)){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
