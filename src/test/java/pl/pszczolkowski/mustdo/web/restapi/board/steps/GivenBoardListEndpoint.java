@@ -20,7 +20,7 @@ public class GivenBoardListEndpoint extends Stage<GivenBoardListEndpoint>{
 	private MockHttpServletRequestBuilder request;
 	
 	public GivenBoardListEndpoint a_board_with_name(String name) {
-		boardBO.add(name);
+		boardBO.add(name,1l);
 		return this;
 	}
 

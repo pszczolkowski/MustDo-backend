@@ -54,7 +54,7 @@ public class GivenBoardAddEndpoint extends Stage<GivenBoardAddEndpoint>{
 	}
 
 	public GivenBoardAddEndpoint a_board_with_name(String name) {
-		boardBO.add(name);
+		boardBO.add(name,1l);
 		return this;
 	}
 	

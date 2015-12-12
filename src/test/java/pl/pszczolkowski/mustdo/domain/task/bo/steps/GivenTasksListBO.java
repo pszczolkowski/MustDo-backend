@@ -16,6 +16,7 @@ import pl.pszczolkowski.mustdo.domain.task.repository.TasksListRepository;
 
 public class GivenTasksListBO extends Stage<GivenTasksListBO>{
 	
+   private static final Long TEAM_ID = 4L;
 	private static final String CLAZZ = GivenTasksListBO.class.getSimpleName();
 
 	@ExpectedScenarioState
@@ -35,7 +36,7 @@ public class GivenTasksListBO extends Stage<GivenTasksListBO>{
 	
 	
 	public GivenTasksListBO a_board() {
-		boardSnapshot = boardBO.add(CLAZZ);
+		boardSnapshot = boardBO.add(CLAZZ, TEAM_ID);
 		return this;
 	}
 

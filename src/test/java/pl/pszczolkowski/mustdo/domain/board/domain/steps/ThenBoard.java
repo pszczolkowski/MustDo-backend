@@ -1,16 +1,13 @@
 package pl.pszczolkowski.mustdo.domain.board.domain.steps;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class ThenBoard extends Stage<ThenBoard> {
 
@@ -20,6 +17,8 @@ public class ThenBoard extends Stage<ThenBoard> {
 	private BoardSnapshot boardSnapshot;
 	@ExpectedScenarioState
 	private String name;
+	@ExpectedScenarioState
+	private Long teamId;
 	@ExpectedScenarioState
 	private BoardRepository boardRepository;
 
@@ -34,6 +33,7 @@ public class ThenBoard extends Stage<ThenBoard> {
 	public void board_should_be_renamed() {
 		assertNotNull(boardSnapshot);
 		assertThat(boardSnapshot.getName(), is(equalTo(name)));
+		assertThat(boardSnapshot.getTeamId(), is(equalTo(teamId)));
 	}
 
 }

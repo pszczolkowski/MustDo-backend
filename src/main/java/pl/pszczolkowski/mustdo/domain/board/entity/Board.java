@@ -27,12 +27,16 @@ public class Board
    @Size(min = 3, max = 100)
    @Column(unique = true)
    private String name;
+   
+   @NotNull
+   private Long teamId;
 
    protected Board() {
    }
 
-   public Board(String name) {
+   public Board(String name, Long teamId) {
       this.name = name;
+      this.teamId = teamId;
    }
 
    public void rename(String name) {
@@ -43,6 +47,6 @@ public class Board
       if (id == null) {
          throw new EntityInStateNewException();
       }
-      return new BoardSnapshot(id, name);
+      return new BoardSnapshot(id, name, teamId);
    }
 }

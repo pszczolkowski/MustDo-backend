@@ -38,7 +38,7 @@ public class GivenTasksListRenameEndpoint extends Stage<GivenTasksListRenameEndp
 	private MockHttpServletRequestBuilder request;
 	
 	public GivenTasksListRenameEndpoint a_board() {
-		boardSnapshot = boardBO.add(CLAZZ);
+		boardSnapshot = boardBO.add(CLAZZ,1l);
 		return this;
 	}
 

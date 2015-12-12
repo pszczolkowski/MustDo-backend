@@ -39,13 +39,22 @@ public class UserSnapshotFinderImpl
 
    @Override
    public Map<Long, UserSnapshot> findAllAsMap(Set<Long> ids) {
-      List<User> employees = userRepository.findAll(ids);
+      List<User> users = userRepository.findAll(ids);
 
-      return employees
+      return users
             .stream()
             .map(User::toSnapshot)
             .collect(Collectors.toMap(UserSnapshot::getId, s->s));
 
    }
+
+	@Override
+	public List<UserSnapshot> findAll() {
+		List<User> users = userRepository.findAll();
+		return users
+				.stream()
+				.map(User::toSnapshot)
+				.collect(Collectors.toList());
+	}
 
 }

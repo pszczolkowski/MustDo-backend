@@ -25,7 +25,7 @@ public class GivenBoardGetEndpoint extends Stage<GivenBoardGetEndpoint> {
 	private Long id;
 
 	public GivenBoardGetEndpoint a_board() {
-		boardSnapshot = boardBO.add(CLAZZ);
+		boardSnapshot = boardBO.add(CLAZZ,1l);
 		this.id = boardSnapshot.getId();
 		return this;
 	}

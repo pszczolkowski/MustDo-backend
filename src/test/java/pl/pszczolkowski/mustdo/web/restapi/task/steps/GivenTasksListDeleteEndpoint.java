@@ -32,7 +32,7 @@ public class GivenTasksListDeleteEndpoint extends Stage<GivenTasksListDeleteEndp
 	private Long id;
 	
 	public GivenTasksListDeleteEndpoint a_board() {
-		boardSnapshot = boardBO.add(CLAZZ);
+		boardSnapshot = boardBO.add(CLAZZ,1l);
 		return this;
 	}
 

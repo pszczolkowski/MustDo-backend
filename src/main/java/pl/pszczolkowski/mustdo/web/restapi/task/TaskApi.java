@@ -1,8 +1,5 @@
 package pl.pszczolkowski.mustdo.web.restapi.task;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +32,9 @@ import pl.pszczolkowski.mustdo.domain.task.finder.TasksListSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.user.dto.UserSnapshot;
 import pl.pszczolkowski.mustdo.domain.user.finder.UserSnapshotFinder;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 @RestController
 @RequestMapping("/task")
 public class TaskApi {
@@ -46,6 +46,7 @@ public class TaskApi {
    private final Validator taskNewValidator;
    private final Validator taskMoveValidator;
    private final Validator taskEditValidator;
+   private final Validator taskAssignValidator;
 
 	@Autowired
 	public TaskApi(TaskBO taskBO, TaskSnapshotFinder taskSnapshotFinder,
@@ -53,6 +54,7 @@ public class TaskApi {
 			TasksListSnapshotFinder tasksListSnapshotFinder,
 			@Qualifier("taskNewValidator") Validator taskNewValidator,
 			@Qualifier("taskMoveValidator") Validator taskMoveValidator,
+			@Qualifier("taskAssignValidator") Validator taskAssignValidator,
 			@Qualifier("taskEditValidator") Validator taskEditValidator) {
 		this.taskBO = taskBO;
 		this.taskSnapshotFinder = taskSnapshotFinder;
@@ -61,6 +63,7 @@ public class TaskApi {
 		this.taskNewValidator = taskNewValidator;
 		this.taskMoveValidator = taskMoveValidator;
 		this.taskEditValidator = taskEditValidator;
+		this.taskAssignValidator = taskAssignValidator;
 	}
 
 	@InitBinder("taskNew")
@@ -76,6 +79,10 @@ public class TaskApi {
    @InitBinder("taskEdit")
    protected void initEditBinder(WebDataBinder binder) {
       binder.setValidator(taskEditValidator);
+   }
+   @InitBinder("taskEdit")
+   protected void initAssignBinder(WebDataBinder binder) {
+      binder.setValidator(taskAssignValidator);
    }
 
    @ApiOperation(
@@ -205,10 +212,48 @@ public class TaskApi {
    public ResponseEntity<Task> move(@Valid @RequestBody TaskMove taskMove) {
 	  String login = getLoggedUserName();
 	  UserSnapshot userSnapshot = userSnapshotFinder.findByLogin(login);
-      taskBO.moveToAntoherTasksList(taskMove.getId(), taskMove.getListId(), userSnapshot.getId());
-
+	  TaskSnapshot taskSnapshot = taskSnapshotFinder.findOneById(taskMove.getId());
+	  
+	  if(taskSnapshot == null){
+		  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	  }
+	  
+	  if(taskMove.getListId() == null || taskSnapshot.getTasksListId().equals(taskMove.getListId())){
+		  taskBO.changePosition(taskMove.getId(), taskMove.getPosition(), userSnapshot.getId());
+	  }else{
+		  taskBO.moveToAntoherTasksList(taskMove.getId(), taskMove.getListId(),taskMove.getPosition(), userSnapshot.getId());
+	  }
+	  
       return new ResponseEntity<>(HttpStatus.OK);
 
+   }
+   
+	@RequestMapping(value = "/comment",
+					method = RequestMethod.POST,
+					consumes = APPLICATION_JSON_VALUE)
+	public ResponseEntity<Task> addComment(@Valid @RequestBody CommentNew commentNew) {
+		TaskSnapshot taskSnapshot = taskSnapshotFinder.findOneById(commentNew.getTaskId());
+		if(taskSnapshot == null){
+			return new ResponseEntity<Task>(HttpStatus.BAD_REQUEST);
+		}
+		taskBO.addComment(taskSnapshot.getId(), commentNew.getText());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "{taskId}/comment", method = RequestMethod.GET)
+	public ResponseEntity<List<Comment>> list(@PathVariable("taskId") Long taskId) {
+		TaskSnapshot taskSnapshot = taskSnapshotFinder.findOneById(taskId);
+		if(taskSnapshot == null){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		Task task = new Task(taskSnapshot);
+		return new ResponseEntity<>(task.getComments(), HttpStatus.OK);
+   }
+   
+	@RequestMapping(value = "/assign", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE)
+   public ResponseEntity<Task> assignTask(@Valid @RequestBody TaskAssign taskAssign){
+      taskBO.assignTask(taskAssign.getTaskId(), taskAssign.getUserId());
+      return new ResponseEntity<>(HttpStatus.OK);
    }
 
 }

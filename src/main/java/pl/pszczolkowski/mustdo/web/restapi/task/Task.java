@@ -1,5 +1,8 @@
 package pl.pszczolkowski.mustdo.web.restapi.task;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import pl.pszczolkowski.mustdo.domain.task.dto.TaskSnapshot;
@@ -13,12 +16,19 @@ public class Task {
    private final Long listId;
    private String username;
    private String listName;
+   private List<Comment> comments;
+   private Long assignedTo;
 
    public Task(TaskSnapshot taskSnapshot) {
       this.id = taskSnapshot.getId();
       this.listId = taskSnapshot.getTasksListId();
       this.title = taskSnapshot.getTitle();
       this.description = taskSnapshot.getDescription();
+      this.comments = taskSnapshot
+    		  .getCommentSnapshots()
+    		  .stream().map(Comment::new)
+    		  .collect(Collectors.toList());
+      this.assignedTo = taskSnapshot.getAssignedTo();
    }
    
    public Task(TaskSnapshot taskSnapshot, String username, String listName){
@@ -56,5 +66,15 @@ public class Task {
 	public String getUsername() {
 		return username;
 	}
+   
+   @ApiModelProperty("Comments assigned to Task")
+   public List<Comment> getComments() {
+      return comments;
+   }
+   
+   @ApiModelProperty("User that task is assigned to")
+   public Long getAssignedTo(){
+      return assignedTo;
+   }
 
 }

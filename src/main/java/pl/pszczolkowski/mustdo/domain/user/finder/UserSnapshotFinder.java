@@ -1,5 +1,6 @@
 package pl.pszczolkowski.mustdo.domain.user.finder;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,4 +13,6 @@ public interface UserSnapshotFinder {
    UserSnapshot findByLogin(String login);
    
    public Map<Long, UserSnapshot> findAllAsMap(Set<Long> ids);
+
+   List<UserSnapshot> findAll();
 }

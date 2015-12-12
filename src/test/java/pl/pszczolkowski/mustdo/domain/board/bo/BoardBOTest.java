@@ -28,7 +28,8 @@ import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
 public class BoardBOTest extends ScenarioTest<GivenBoardBO, WhenBoardBO, ThenBoardBO>{
 	
 	private static final String CLAZZ = BoardBO.class.getSimpleName();
-	
+   private static final long TEAM_ID = 2L;
+
 	@Autowired
 	@ProvidedScenarioState
 	private BoardBO boardBO;
@@ -43,7 +44,7 @@ public class BoardBOTest extends ScenarioTest<GivenBoardBO, WhenBoardBO, ThenBoa
 	
 	@Test
 	public void should_add_new_board(){
-		given().a_name_for_board(CLAZZ);
+		given().a_name_for_board(CLAZZ).and().a_team_id_for_board(TEAM_ID);
 		when().addBoard_is_invoked();
 		then().board_should_be_added();
 	}
@@ -51,36 +52,36 @@ public class BoardBOTest extends ScenarioTest<GivenBoardBO, WhenBoardBO, ThenBoa
 	@Test
 	public void should_throw_boardAlreadyExistException_when_add_invoked_and_board_already_exist(){
 		given().a_name_for_board(CLAZZ)
-			.and().a_board_with_name(CLAZZ);
+			.and().a_board_with_name_and_teamID(CLAZZ, TEAM_ID);
 		when().addBoard_is_invoked();
 		then().boardAlreadyExistException_should_be_thrown();
 	}
 	
 	@Test
 	public void should_rename_existing_board(){
-		given().a_board_with_name(CLAZZ);
+		given().a_board_with_name_and_teamID(CLAZZ, TEAM_ID);
 		when().rename_is_invoked();
 		then().board_should_be_renamed();
 	}
 	
 	@Test
 	public void should_throw_boardAlreadyExistException_when_rename_invoked_and_board_already_exist(){
-		given().a_board_with_name(CLAZZ)
-			.and().other_board_with_name(CLAZZ + "other");
+		given().a_board_with_name_and_teamID(CLAZZ, TEAM_ID)
+			.and().other_board_with_name_and_team_id(CLAZZ + "other", 3L);
 		when().rename_is_invoked_with_name(CLAZZ + "other");
 		then().boardAlreadyExistException_should_be_thrown();
 	}
 	
 	@Test
 	public void should_return_unchanged_board_when_rename_invoked_and_name_did_not_changed(){
-		given().a_board_with_name(CLAZZ);
+		given().a_board_with_name_and_teamID(CLAZZ, TEAM_ID);
 		when().rename_is_invoked_with_name(CLAZZ);
 		then().nothing_should_have_changed();
 	}
 	
 	@Test
 	public void should_delete_board(){
-		given().a_board_with_name(CLAZZ);
+		given().a_board_with_name_and_teamID(CLAZZ, TEAM_ID);
 		when().delete_is_invoked();
 		then().board_should_be_removed();
 	}
