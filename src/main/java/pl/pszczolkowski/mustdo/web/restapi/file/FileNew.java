@@ -2,28 +2,16 @@ package pl.pszczolkowski.mustdo.web.restapi.file;
 
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.web.multipart.MultipartFile;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties({ "bytes" })
+@ApiModel
 public class FileNew {
-	@NotEmpty
-	private String fileName;
+	
 	@NotNull
 	private Long taskId;
-	@NotNull
-	private MultipartFile file;
 	
-	public MultipartFile getFile() {
-		return file;
-	}
-	
-	public String getFileName() {
-		return fileName;
-	}
-	
+	@ApiModelProperty("Unique identifier of Task that file should be assigned to")
 	public Long getTaskId() {
 		return taskId;
 	}

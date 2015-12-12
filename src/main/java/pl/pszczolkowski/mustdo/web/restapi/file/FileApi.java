@@ -15,15 +15,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -100,7 +102,6 @@ public class FileApi {
    @ApiResponses(value = {
       @ApiResponse(code = 200,
          message = "Remove specified File")})
-   @PreAuthorize("hasAnyRole('ROLE_HR', 'ROLE_MANAGER')")
    @RequestMapping(value = "/file/{fileId}",
       method = RequestMethod.DELETE)
    @ResponseBody
@@ -114,20 +115,30 @@ public class FileApi {
       }
    }
 
-	@ApiOperation(value = "Upload file",
-				  notes = "Returns empty body")
-	@ApiResponses(value = { 
-			@ApiResponse(code = 200,
-					message = "File uploaded"),
-			@ApiResponse(code = 400,
-					message = "Invalid input") })
-	@RequestMapping(value = "/file/upload", method = RequestMethod.POST)
-	@ResponseBody
-	public HttpEntity<Void> upload(@Valid @RequestBody FileNew fileNew) throws IOException {
-		String[] temp = fileNew.getFile().getOriginalFilename().split(".");
-		fileBO.add(fileNew.getFileName(),temp[temp.length-1], fileNew.getFile().getBytes(), fileNew.getTaskId());
+	@ApiOperation(
+		value = "Upload file",
+		notes = "Returns empty body")
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = "File uploaded"),
+		@ApiResponse(code = 400, message = "Invalid input") })
+	@RequestMapping(
+		value = "/file/upload", 
+		method = RequestMethod.POST,
+		consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public HttpEntity<Void> upload(@Valid @RequestPart("data") FileNew fileNew, @Valid @RequestPart("file") MultipartFile file) throws IOException {
+		String fileName = file.getOriginalFilename();
+		fileBO.add(fileName, getFileExtension(fileName), file.getBytes(), fileNew.getTaskId());
 		
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	private String getFileExtension(String fileName) {
+		String[] nameParts = fileName.split("\\.");
+		if (nameParts.length <= 1) {
+			return "";
+		} else {
+			return nameParts[nameParts.length - 1];
+		}
 	}
 	
 	@ApiOperation(value = "Return list of files by TaskId",

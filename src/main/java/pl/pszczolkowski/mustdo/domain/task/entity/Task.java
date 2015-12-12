@@ -117,10 +117,6 @@ public class Task extends AbstractAuditingEntity
       return new TaskSnapshot(id, tasksList.getId(), boardId, title, description, createdAtExport, updatedAtExport, createdBy, updatedBy, commentsExport, assignedTo);
    }
    
-	public Long getId() {
-		return id;
-	}
-
    protected Long getId(){
 	   return this.id;
    }
