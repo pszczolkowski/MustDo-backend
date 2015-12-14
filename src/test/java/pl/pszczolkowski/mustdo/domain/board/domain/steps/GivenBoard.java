@@ -13,7 +13,7 @@ public class GivenBoard extends Stage<GivenBoard>{
 	@ProvidedScenarioState
 	private String name = GivenBoard.class.getSimpleName();
 	@ProvidedScenarioState
-   private Long teamID = 3L;
+	private Long teamID = 3L;
 	
 	@ExpectedScenarioState
 	private BoardRepository boardRepository;

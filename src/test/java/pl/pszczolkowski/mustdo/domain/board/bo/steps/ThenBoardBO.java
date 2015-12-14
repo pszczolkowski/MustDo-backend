@@ -7,6 +7,7 @@ import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.board.entity.Board;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
+import pl.pszczolkowski.mustdo.domain.team.dto.TeamSnapshot;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -19,7 +20,7 @@ public class ThenBoardBO extends Stage<ThenBoardBO> {
 	@ExpectedScenarioState
 	private String name;
 	@ExpectedScenarioState
-	private Long teamId;
+	private TeamSnapshot teamSnapshot;
 	@ExpectedScenarioState
 	private boolean boardAlreadyExistExceptionThrown;
 	@ProvidedScenarioState
@@ -28,7 +29,7 @@ public class ThenBoardBO extends Stage<ThenBoardBO> {
 	public void board_should_be_added() {
 		assertNotNull(boardSnapshot);
 		assertThat(boardSnapshot.getName(), is(equalTo(name)));
-		assertThat(boardSnapshot.getTeamId(), is(equalTo(teamId)));
+		assertThat(boardSnapshot.getTeamId(), is(equalTo(teamSnapshot.getId())));
 	}
 
 	public void boardAlreadyExistException_should_be_thrown() {

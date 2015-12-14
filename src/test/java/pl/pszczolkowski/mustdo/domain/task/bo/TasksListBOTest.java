@@ -22,6 +22,7 @@ import pl.pszczolkowski.mustdo.domain.task.bo.steps.ThenTasksListBO;
 import pl.pszczolkowski.mustdo.domain.task.bo.steps.WhenTasksListBO;
 import pl.pszczolkowski.mustdo.domain.task.finder.TasksListSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.task.repository.TasksListRepository;
+import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -34,6 +35,9 @@ public class TasksListBOTest extends ScenarioTest<GivenTasksListBO, WhenTasksLis
 	@Autowired
 	@ProvidedScenarioState
 	private BoardBO boardBO;
+	@Autowired
+	@ProvidedScenarioState
+	private TeamBO teamBO;
 	@Autowired
 	@ProvidedScenarioState
 	private TasksListBO tasksListBo;

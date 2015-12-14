@@ -18,7 +18,7 @@ public class ThenBoard extends Stage<ThenBoard> {
 	@ExpectedScenarioState
 	private String name;
 	@ExpectedScenarioState
-	private Long teamId;
+	private Long teamID;
 	@ExpectedScenarioState
 	private BoardRepository boardRepository;
 
@@ -33,7 +33,7 @@ public class ThenBoard extends Stage<ThenBoard> {
 	public void board_should_be_renamed() {
 		assertNotNull(boardSnapshot);
 		assertThat(boardSnapshot.getName(), is(equalTo(name)));
-		assertThat(boardSnapshot.getTeamId(), is(equalTo(teamId)));
+		assertThat(boardSnapshot.getTeamId(), is(equalTo(teamID)));
 	}
 
 }

@@ -8,6 +8,7 @@ import com.tngtech.jgiven.annotation.ScenarioState;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.board.exception.BoardAlreadyExistException;
+import pl.pszczolkowski.mustdo.domain.team.dto.TeamSnapshot;
 
 public class WhenBoardBO extends Stage<WhenBoardBO>{
 	
@@ -26,12 +27,12 @@ public class WhenBoardBO extends Stage<WhenBoardBO>{
 	@ExpectedScenarioState
 	private String name;
 	@ExpectedScenarioState
-	private Long teamId;
+	private TeamSnapshot teamSnapshot;
 	
 	
 	public void addBoard_is_invoked() {
 		try{
-			boardSnapshot = boardBO.add(name, teamId);		
+			boardSnapshot = boardBO.add(name, teamSnapshot.getId());		
 		}catch(BoardAlreadyExistException e){
 			boardAlreadyExistExceptionThrown = true;
 		}
