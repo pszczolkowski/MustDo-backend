@@ -30,6 +30,9 @@ public class Board
    
    @NotNull
    private Long teamId;
+   
+   @NotNull
+   private Boolean isPublic;
 
    protected Board() {
    }
@@ -37,16 +40,25 @@ public class Board
    public Board(String name, Long teamId) {
       this.name = name;
       this.teamId = teamId;
+      this.isPublic = false;
    }
 
    public void rename(String name) {
       this.name = name;
+   }
+   
+   public void markAsPublic(){
+	   this.isPublic = true;
+   }
+   
+   public void markAsPrivate(){
+	   this.isPublic = false;
    }
 
    public BoardSnapshot toSnapshot() {
       if (id == null) {
          throw new EntityInStateNewException();
       }
-      return new BoardSnapshot(id, name, teamId);
+      return new BoardSnapshot(id, name, teamId, isPublic);
    }
 }

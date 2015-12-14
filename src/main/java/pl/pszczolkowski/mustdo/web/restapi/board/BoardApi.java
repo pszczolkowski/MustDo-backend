@@ -114,7 +114,7 @@ public class BoardApi {
       }
       UserSnapshot userSnapshot = getLoggedUserSnapshot();
       TeamSnapshot teamSnapshot = teamSnapshotFinder.findById(boardSnapshot.getTeamId());
-      if(!teamSnapshot.getTeamMembersIds().contains(userSnapshot.getId())){
+      if(!teamSnapshot.getTeamMembersIds().contains(userSnapshot.getId()) && !boardSnapshot.isPublic()){
          return new ResponseEntity<>(HttpStatus.FORBIDDEN);
       }
       return new ResponseEntity<>(new Board(boardSnapshot), HttpStatus.OK);
@@ -140,6 +140,58 @@ public class BoardApi {
       }
       return new ResponseEntity<>(new Board(boardSnapshot), HttpStatus.OK);
    }
+   
+   @ApiOperation(
+		value = "Mark board as public",
+        notes = "Return empty body")
+   @ApiResponses({
+        @ApiResponse(code = 200, message = "Board marked as public"),
+        @ApiResponse(code = 400, message = "Invalid input"),
+        @ApiResponse(code = 403, message = "User hasn't permission")})
+   @RequestMapping(
+		value = "/{boardId}/markAsPublic",
+		method = RequestMethod.POST)
+	public HttpEntity<Board> markAsPublic(@PathVariable("boardId") Long boardId) {
+		BoardSnapshot boardSnapshot = boardSnapshotFinder.findOneById(boardId);
+		if(boardSnapshot == null){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		TeamSnapshot teamSnapshot = teamSnapshotFinder.findById(boardSnapshot.getTeamId());
+		UserSnapshot userSnapshot = getLoggedUserSnapshot();
+		
+		if(!teamSnapshot.getTeamMembersIds().contains(userSnapshot.getId())){
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		boardBO.markAsPublic(boardId);
+		return new ResponseEntity<>(new Board(boardSnapshot), HttpStatus.OK);
+	}
+   
+   @ApiOperation(
+		value = "Mark board as private",
+        notes = "Return empty body")
+   @ApiResponses({
+        @ApiResponse(code = 200, message = "Board marked as private"),
+        @ApiResponse(code = 400, message = "Invalid input"),
+        @ApiResponse(code = 403, message = "User hasn't permission")})
+   @RequestMapping(
+		value = "/{boardId}/markAsPrivate",
+		method = RequestMethod.POST)
+	public HttpEntity<Board> markAsPrivate(@PathVariable("boardId") Long boardId) {
+		BoardSnapshot boardSnapshot = boardSnapshotFinder.findOneById(boardId);
+		if(boardSnapshot == null){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		TeamSnapshot teamSnapshot = teamSnapshotFinder.findById(boardSnapshot.getTeamId());
+		UserSnapshot userSnapshot = getLoggedUserSnapshot();
+		
+		if(!teamSnapshot.getTeamMembersIds().contains(userSnapshot.getId())){
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		boardBO.markAsPrivate(boardId);
+		return new ResponseEntity<>(new Board(boardSnapshot), HttpStatus.OK);
+	}
 
    @ApiOperation(
 		value = "Edit existing Board",

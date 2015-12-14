@@ -81,4 +81,24 @@ public class BoardBOImpl
       eventPublisher.publishEvent(boardRemovedEvent);
    }
 
+	@Override
+	public void markAsPublic(Long id) {
+		Board board = boardRepository.findOne(id);
+		board.markAsPublic();
+		
+		board = boardRepository.save(board);
+		LOGGER.info("Board with id {<>} marked as public");
+
+	}
+
+	@Override
+	public void markAsPrivate(Long id) {
+		Board board = boardRepository.findOne(id);
+		board.markAsPrivate();
+		
+		board = boardRepository.save(board);
+		LOGGER.info("Board with id {<>} marked as private");
+
+	}
+
 }
