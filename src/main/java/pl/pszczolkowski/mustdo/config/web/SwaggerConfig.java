@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
 
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -22,7 +21,6 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Lists.newArrayList;
 import static springfox.documentation.builders.PathSelectors.regex;
 
@@ -56,7 +54,7 @@ public class SwaggerConfig {
       return new Docket(DocumentationType.SWAGGER_2)
          .groupName(title)
          .select()
-         .paths(and(not(adminPaths()), regex(".*")))
+         .paths(regex(".*"))
          .build()
          .apiInfo(apiInfo(title))
          .protocols(Sets.newHashSet("http", "https"))
@@ -64,19 +62,7 @@ public class SwaggerConfig {
          .securityContexts(newArrayList(securityContext()));
    }
 
-   @Bean
-   public Docket adminApiDocumentationGroup() {
-      String title = "Admin-API";
-      return new Docket(DocumentationType.SWAGGER_2)
-         .groupName(title)
-         .select()
-         .paths(adminPaths())
-         .build()
-         .apiInfo(apiInfo(title))
-         .protocols(Sets.newHashSet("http", "https"))
-         .securitySchemes(newArrayList(apiKey()))
-         .securityContexts(newArrayList(securityContext()));
-   }
+
 
    /**
     * How we should configure it properly for our up?
@@ -103,9 +89,5 @@ public class SwaggerConfig {
       return newArrayList(new SecurityReference("mykey", authorizationScopes));
    }
 
-   private Predicate<String> adminPaths() {
-      return or(regex("/admin/.*"),
-         regex("/javascript.*"));
-   }
 
 }

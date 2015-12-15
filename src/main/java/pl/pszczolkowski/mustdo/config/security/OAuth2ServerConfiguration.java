@@ -61,6 +61,7 @@ public class OAuth2ServerConfiguration {
             .authorizeRequests()
             .antMatchers("/authenticate").permitAll()
             .antMatchers("/account/register").permitAll()
+            .antMatchers("/v2/*").permitAll()
             .antMatchers("/file/**").permitAll()
             .antMatchers("/**").authenticated();
 
