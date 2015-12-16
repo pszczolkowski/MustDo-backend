@@ -2,8 +2,10 @@ package pl.pszczolkowski.mustdo.web.restapi.board.steps;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +13,7 @@ import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 
+import pl.pszczolkowski.mustdo.config.OAuthHelper;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.web.restapi.board.BoardNew;
 
@@ -25,6 +28,8 @@ public class GivenBoardAddEndpoint extends Stage<GivenBoardAddEndpoint>{
 	
 	@ExpectedScenarioState
 	private BoardBO boardBO;
+	@ExpectedScenarioState
+	private OAuthHelper oAuthHelper;
 
 	public GivenBoardAddEndpoint a_name_for_board(String name) {
 		this.name = name;
@@ -46,7 +51,7 @@ public class GivenBoardAddEndpoint extends Stage<GivenBoardAddEndpoint>{
 
 	      String body = objectMapper.writeValueAsString(boardNew);
 
-	      request = post("/board")
+	      request = post("/account/register")
 	            .contentType(MediaType.APPLICATION_JSON)
 	            .content(body)
 	            .accept(MediaType.parseMediaType("application/json;charset=UTF-8"));

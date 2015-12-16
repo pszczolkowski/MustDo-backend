@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,12 +18,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import pl.pszczolkowski.mustdo.security.AjaxLogoutSuccessHandler;
 import pl.pszczolkowski.mustdo.security.AuthoritiesConstants;
 import pl.pszczolkowski.mustdo.security.Http401UnauthorizedEntryPoint;
+import pl.pszczolkowski.mustdo.sharedkernel.constant.Profiles;
 
 @Configuration
 public class OAuth2ServerConfiguration {
@@ -88,9 +91,16 @@ public class OAuth2ServerConfiguration {
       @Value("${oauth2.tokenValidityInSeconds}")
       private int tokenValidityInSeconds;
 
-      @Bean
+      @Bean(name = "tokenStore")
+      @Profile({Profiles.DEVELOPMENT, Profiles.PRODUCTION})
       public TokenStore tokenStore() {
          return new JdbcTokenStore(dataSource);
+      }
+      
+      @Bean(name = "tokenStore")
+      @Profile({Profiles.TEST})
+      public TokenStore tokenStoreInMemory() {
+         return new InMemoryTokenStore();
       }
 
       @Autowired

@@ -2,9 +2,11 @@ package pl.pszczolkowski.mustdo.web.restapi.util;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -12,6 +14,8 @@ import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.BeforeStage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
+
+import pl.pszczolkowski.mustdo.config.OAuthHelper;
 
 public class RestApiWhenStage extends Stage<RestApiWhenStage> {
 
@@ -22,6 +26,8 @@ public class RestApiWhenStage extends Stage<RestApiWhenStage> {
 	private WebApplicationContext context;
 	@ExpectedScenarioState
 	private MockHttpServletRequestBuilder request;
+	@ExpectedScenarioState
+	private OAuthHelper oAuthHelper;
 
 	private MockMvc mockMvc;
 
@@ -34,7 +40,8 @@ public class RestApiWhenStage extends Stage<RestApiWhenStage> {
 	}
 
 	public void request_is_invoked() throws Exception {
-		result = mockMvc.perform(request);
+		RequestPostProcessor bearerToken = oAuthHelper.bearerToken("mustdoapp");
+		result = mockMvc.perform(request.with(bearerToken));
 	}
 
 }

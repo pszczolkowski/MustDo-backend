@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.oauth2.client.test.OAuth2ContextConfiguration;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -16,6 +18,8 @@ import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.junit.ScenarioTest;
 
 import pl.pszczolkowski.mustdo.Application;
+import pl.pszczolkowski.mustdo.config.MyAppTest;
+import pl.pszczolkowski.mustdo.config.OAuthHelper;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.finder.BoardSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
@@ -28,12 +32,16 @@ import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
+//@OAuth2ContextConfiguration
 public class BoardAddEndpointTest extends ScenarioTest<GivenBoardAddEndpoint, RestApiWhenStage, ThenBoardAddEndpoint>{
-	
+
 	private static final String CLAZZ = BoardAddEndpointTest.class.getSimpleName();
 	@Autowired
 	@ProvidedScenarioState
 	private WebApplicationContext context;
+	@Autowired
+	@ProvidedScenarioState
+	private OAuthHelper oauthHelper;
 	@Autowired
 	@ProvidedScenarioState
 	private BoardSnapshotFinder boardSnapshotFinder;
