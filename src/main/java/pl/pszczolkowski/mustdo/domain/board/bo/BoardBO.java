@@ -9,4 +9,8 @@ public interface BoardBO {
    BoardSnapshot rename(Long id, String name);
 
    void delete(Long id);
+   
+   void markAsPublic(Long id);
+   
+   void markAsPrivate(Long id);
 }
