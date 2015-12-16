@@ -7,8 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.security.oauth2.client.test.OAuth2ContextConfiguration;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -18,11 +16,12 @@ import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.junit.ScenarioTest;
 
 import pl.pszczolkowski.mustdo.Application;
-import pl.pszczolkowski.mustdo.config.MyAppTest;
 import pl.pszczolkowski.mustdo.config.OAuthHelper;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.finder.BoardSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
+import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
+import pl.pszczolkowski.mustdo.domain.team.repository.TeamRepository;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.GivenBoardAddEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.ThenBoardAddEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
@@ -51,15 +50,23 @@ public class BoardAddEndpointTest extends ScenarioTest<GivenBoardAddEndpoint, Re
 	@Autowired
 	@ProvidedScenarioState
 	private BoardBO boardBO;
+	@Autowired
+	@ProvidedScenarioState
+	private TeamBO teamBO;
+	@Autowired
+	@ProvidedScenarioState
+	private TeamRepository teamRepository;
 	
 	@After
 	public void tearDown(){
 		boardRepository.deleteAll();
+		teamRepository.deleteAll();
 	}
 	
 	@Test
 	public void should_create_board_when_add_invoked() throws Exception{
-		given().a_name_for_board(CLAZZ)
+		given().a_team()
+			.and().a_name_for_board(CLAZZ)
 			.and().a_request_to_endpoint();
 		when().request_is_invoked();
 		then().board_should_be_created()
@@ -68,7 +75,7 @@ public class BoardAddEndpointTest extends ScenarioTest<GivenBoardAddEndpoint, Re
 	
 	@Test
 	public void should_return_bad_request_when_add_invoked_and_board_with_the_same_name_exist() throws Exception{
-		given().a_board_with_name(CLAZZ)
+		given().a_team().a_board_with_name(CLAZZ)
 			.and().a_name_for_board(CLAZZ)
 			.and().a_request_to_endpoint();
 		when().request_is_invoked();

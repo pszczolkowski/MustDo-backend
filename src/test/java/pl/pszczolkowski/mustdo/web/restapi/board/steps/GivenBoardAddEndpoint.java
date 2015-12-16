@@ -15,6 +15,8 @@ import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 
 import pl.pszczolkowski.mustdo.config.OAuthHelper;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
+import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
+import pl.pszczolkowski.mustdo.domain.team.dto.TeamSnapshot;
 import pl.pszczolkowski.mustdo.web.restapi.board.BoardNew;
 
 public class GivenBoardAddEndpoint extends Stage<GivenBoardAddEndpoint>{
@@ -29,7 +31,8 @@ public class GivenBoardAddEndpoint extends Stage<GivenBoardAddEndpoint>{
 	@ExpectedScenarioState
 	private BoardBO boardBO;
 	@ExpectedScenarioState
-	private OAuthHelper oAuthHelper;
+	private TeamBO teamBO;
+	private TeamSnapshot teamSnapshot;
 
 	public GivenBoardAddEndpoint a_name_for_board(String name) {
 		this.name = name;
@@ -38,7 +41,8 @@ public class GivenBoardAddEndpoint extends Stage<GivenBoardAddEndpoint>{
 
 	public GivenBoardAddEndpoint a_request_to_endpoint() throws JsonProcessingException {
 		boardNew = new BoardNew();
-		boardNew.setName(this.name);
+		boardNew.setName("Board");
+		boardNew.setExistingTeamId(teamSnapshot.getId());
 		
 		aRequestToEndpoint();
 		
@@ -51,7 +55,7 @@ public class GivenBoardAddEndpoint extends Stage<GivenBoardAddEndpoint>{
 
 	      String body = objectMapper.writeValueAsString(boardNew);
 
-	      request = post("/account/register")
+	      request = post("/board")
 	            .contentType(MediaType.APPLICATION_JSON)
 	            .content(body)
 	            .accept(MediaType.parseMediaType("application/json;charset=UTF-8"));
@@ -59,7 +63,12 @@ public class GivenBoardAddEndpoint extends Stage<GivenBoardAddEndpoint>{
 	}
 
 	public GivenBoardAddEndpoint a_board_with_name(String name) {
-		boardBO.add(name,1l);
+		boardBO.add("Board",teamSnapshot.getId());
+		return this;
+	}
+
+	public GivenBoardAddEndpoint a_team() {
+		teamSnapshot = teamBO.add("Team", 1l);
 		return this;
 	}
 	

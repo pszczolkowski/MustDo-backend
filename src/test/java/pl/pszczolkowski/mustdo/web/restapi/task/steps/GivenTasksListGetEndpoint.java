@@ -14,6 +14,8 @@ import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.bo.TasksListBO;
 import pl.pszczolkowski.mustdo.domain.task.dto.TasksListSnapshot;
+import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
+import pl.pszczolkowski.mustdo.domain.team.dto.TeamSnapshot;
 
 public class GivenTasksListGetEndpoint extends Stage<GivenTasksListGetEndpoint>{
 	
@@ -23,6 +25,9 @@ public class GivenTasksListGetEndpoint extends Stage<GivenTasksListGetEndpoint>{
 	private BoardBO boardBO;
 	@ExpectedScenarioState
 	private TasksListBO tasksListBO;
+	@ExpectedScenarioState
+	private TeamBO teamBO;
+	@ExpectedScenarioState
 	
 	@ProvidedScenarioState
 	private BoardSnapshot boardSnapshot;
@@ -34,7 +39,8 @@ public class GivenTasksListGetEndpoint extends Stage<GivenTasksListGetEndpoint>{
 	Long id;
 	
 	public GivenTasksListGetEndpoint a_board() {
-		boardSnapshot = boardBO.add(CLAZZ, 1l);
+		TeamSnapshot teamSnapshot = teamBO.add("Team", 1l);
+		boardSnapshot = boardBO.add(CLAZZ, teamSnapshot.getId());
 		return this;
 	}
 

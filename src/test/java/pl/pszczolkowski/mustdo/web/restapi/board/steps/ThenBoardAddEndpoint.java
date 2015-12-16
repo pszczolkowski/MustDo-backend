@@ -29,8 +29,8 @@ public class ThenBoardAddEndpoint extends Stage<ThenBoardAddEndpoint>{
 	private String name;
 	
 	public ThenBoardAddEndpoint board_should_be_created() {
-		BoardSnapshot boardSnapshots = boardSnapshotFinder.findOneByName(boardNew.getName());
-		assertNotNull("isNull",boardSnapshots);
+		BoardSnapshot boardSnapshot = boardSnapshotFinder.findOneByName(boardNew.getName());
+		assertNotNull(boardSnapshot);
 		return this;
 	}
 
@@ -40,7 +40,7 @@ public class ThenBoardAddEndpoint extends Stage<ThenBoardAddEndpoint>{
 			.andExpect(content().contentType("application/json;charset=UTF-8"))
 			.andExpect(jsonPath("$.id", isA(Integer.class)))
 			.andExpect(jsonPath("$.name", isA(String.class)))
-			.andExpect(jsonPath("$.name", is(equalTo(name))));
+			.andExpect(jsonPath("$.name", is(equalTo(boardNew.getName()))));
 		
 		return this;
 		

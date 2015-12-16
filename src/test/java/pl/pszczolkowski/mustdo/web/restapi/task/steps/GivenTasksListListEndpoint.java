@@ -12,6 +12,8 @@ import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.bo.TasksListBO;
+import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
+import pl.pszczolkowski.mustdo.domain.team.dto.TeamSnapshot;
 
 
 public class GivenTasksListListEndpoint extends Stage<GivenTasksListListEndpoint>{
@@ -21,6 +23,8 @@ public class GivenTasksListListEndpoint extends Stage<GivenTasksListListEndpoint
 	private BoardBO boardBO;
 	@ExpectedScenarioState
 	private TasksListBO tasksListBO;
+	@ExpectedScenarioState
+	private TeamBO teamBO;
 	
 	@ProvidedScenarioState
 	private MockHttpServletRequestBuilder request;
@@ -28,7 +32,8 @@ public class GivenTasksListListEndpoint extends Stage<GivenTasksListListEndpoint
 	BoardSnapshot boardSnapshot;
 	
 	public GivenTasksListListEndpoint a_board() {
-		boardSnapshot = boardBO.add(CLAZZ,1l);
+		TeamSnapshot teamSnapshot = teamBO.add("team", 1l);
+		boardSnapshot = boardBO.add(CLAZZ,teamSnapshot.getId());
 		return this;
 	}
 

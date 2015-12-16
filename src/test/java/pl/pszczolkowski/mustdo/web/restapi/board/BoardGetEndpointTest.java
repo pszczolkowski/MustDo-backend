@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -16,8 +17,12 @@ import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.junit.ScenarioTest;
 
 import pl.pszczolkowski.mustdo.Application;
+import pl.pszczolkowski.mustdo.config.OAuthHelper;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
+import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
+import pl.pszczolkowski.mustdo.domain.team.repository.TeamRepository;
+import pl.pszczolkowski.mustdo.domain.user.repo.UserRepository;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.GivenBoardGetEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.ThenBoardGetEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
@@ -37,15 +42,30 @@ public class BoardGetEndpointTest extends ScenarioTest<GivenBoardGetEndpoint, Re
 	@Autowired
 	@ProvidedScenarioState
 	private BoardBO boardBO;
+	@Autowired
+	@ProvidedScenarioState
+	private OAuthHelper oauthHelper;
+	@Autowired
+	@ProvidedScenarioState
+	private TeamBO teamBO;
+	@Autowired
+	@ProvidedScenarioState
+	private TeamRepository teamRepository;
+	@Autowired
+	@ProvidedScenarioState
+	private UserRepository userRepository;
 	
 	@After
 	public void tearDown(){
 		boardRepository.deleteAll();
+		teamRepository.deleteAll();
+		userRepository.deleteAll();
 	}
 	
 	@Test
+	@WithMockUser(username = "user")
 	public void should_return_board_when_get_invoked() throws Exception{
-		given().a_board()
+		given().an_user_with_name("user").a_team().a_board()
 			.and().a_request_to_endpoint();
 		when().request_is_invoked();
 		then().board_should_be_returned();

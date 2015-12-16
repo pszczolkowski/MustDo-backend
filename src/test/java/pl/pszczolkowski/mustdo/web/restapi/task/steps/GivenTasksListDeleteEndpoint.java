@@ -13,6 +13,8 @@ import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.dto.BoardSnapshot;
 import pl.pszczolkowski.mustdo.domain.task.bo.TasksListBO;
 import pl.pszczolkowski.mustdo.domain.task.dto.TasksListSnapshot;
+import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
+import pl.pszczolkowski.mustdo.domain.team.dto.TeamSnapshot;
 
 public class GivenTasksListDeleteEndpoint extends Stage<GivenTasksListDeleteEndpoint>{
 	
@@ -22,6 +24,8 @@ public class GivenTasksListDeleteEndpoint extends Stage<GivenTasksListDeleteEndp
 	private BoardBO boardBO;
 	@ExpectedScenarioState
 	private TasksListBO tasksListBO;
+	@ExpectedScenarioState
+	private TeamBO teamBO;
 	
 	@ProvidedScenarioState
 	private BoardSnapshot boardSnapshot;
@@ -32,7 +36,8 @@ public class GivenTasksListDeleteEndpoint extends Stage<GivenTasksListDeleteEndp
 	private Long id;
 	
 	public GivenTasksListDeleteEndpoint a_board() {
-		boardSnapshot = boardBO.add(CLAZZ,1l);
+		TeamSnapshot teamSnapshot = teamBO.add("TEam", 1l);
+		boardSnapshot = boardBO.add(CLAZZ,teamSnapshot.getId());
 		return this;
 	}
 

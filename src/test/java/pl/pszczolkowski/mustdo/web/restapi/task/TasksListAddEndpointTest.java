@@ -16,11 +16,14 @@ import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.junit.ScenarioTest;
 
 import pl.pszczolkowski.mustdo.Application;
+import pl.pszczolkowski.mustdo.config.OAuthHelper;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
 import pl.pszczolkowski.mustdo.domain.task.bo.TasksListBO;
 import pl.pszczolkowski.mustdo.domain.task.finder.TasksListSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.task.repository.TasksListRepository;
+import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
+import pl.pszczolkowski.mustdo.domain.team.repository.TeamRepository;
 import pl.pszczolkowski.mustdo.web.restapi.task.steps.GivenTasksListAddEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.task.steps.ThenTasksListAddEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
@@ -48,11 +51,21 @@ public class TasksListAddEndpointTest extends ScenarioTest<GivenTasksListAddEndp
 	@Autowired
 	@ProvidedScenarioState
 	private TasksListSnapshotFinder tasksListSnapshotFinder;
+	@Autowired
+	@ProvidedScenarioState
+	private OAuthHelper oauthHelper;
+	@Autowired
+	@ProvidedScenarioState
+	private TeamBO teamBO;
+	@Autowired
+	@ProvidedScenarioState
+	private TeamRepository teamRepository;
 	
 	@After
 	public void tearDown(){
 		tasksListRepository.deleteAll();
 		boardRepository.deleteAll();
+		teamRepository.deleteAll();
 	}
 	
 	@Test

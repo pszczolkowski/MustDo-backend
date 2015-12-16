@@ -7,18 +7,25 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.junit.ScenarioTest;
 
 import pl.pszczolkowski.mustdo.Application;
+import pl.pszczolkowski.mustdo.config.OAuthHelper;
 import pl.pszczolkowski.mustdo.domain.board.bo.BoardBO;
 import pl.pszczolkowski.mustdo.domain.board.finder.BoardSnapshotFinder;
 import pl.pszczolkowski.mustdo.domain.board.repository.BoardRepository;
+import pl.pszczolkowski.mustdo.domain.team.bo.TeamBO;
+import pl.pszczolkowski.mustdo.domain.team.repository.TeamRepository;
+import pl.pszczolkowski.mustdo.domain.user.bo.UserBO;
+import pl.pszczolkowski.mustdo.domain.user.repo.UserRepository;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.GivenBoardDeleteEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.board.steps.ThenBoardDeleteEndpoint;
 import pl.pszczolkowski.mustdo.web.restapi.util.RestApiWhenStage;
@@ -42,15 +49,33 @@ public class BoardDeleteEndpointTest extends ScenarioTest<GivenBoardDeleteEndpoi
 	@Autowired
 	@ProvidedScenarioState
 	private BoardSnapshotFinder boardSnapshotFinder;
+	@Autowired
+	@ProvidedScenarioState
+	private TeamBO teamBO;
+	@Autowired
+	@ProvidedScenarioState
+	private TeamRepository teamRepository;
+	@Autowired
+	@ProvidedScenarioState
+	private OAuthHelper oAuthHelper;
+	@Autowired
+	@ProvidedScenarioState
+	private UserBO userBO;
+	@Autowired
+	@ProvidedScenarioState
+	private UserRepository userRepository;
 	
 	@After
 	public void tearDown(){
 		boardRepository.deleteAll();
+		teamRepository.deleteAll();
+		userRepository.deleteAll();
 	}
 	
 	@Test
+	@WithMockUser(username = "user")
 	public void should_remove_board_when_delete_invoked() throws Exception{
-		given().a_board()
+		given().a_user_with_name("user").a_team().a_board()
 			.and().a_request_to_endpoint();
 		when().request_is_invoked();
 		then().board_should_be_removed();
